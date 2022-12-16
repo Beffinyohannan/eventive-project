@@ -56,7 +56,7 @@ function CompanyList() {
                         <div className=' flex justify-between p-1 px-1 mb-3 bg-white  rounded-2xl border-slate-200 border-t shadow-md '>
                             <div className='flex'>
                                 <div className='m-2 py-3 px-1'>
-                                    <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full' width={70} height={60} alt="" />
+                                    <img src={'/images/' + obj.profilePicture} className='rounded-full' width={70} height={60} alt="" />
                                 </div>
                                 <div className='ml-2 p-1 '>
                                     <Link to={`/profile/company/${obj._id}`} className='text-md sm:text-xl font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>

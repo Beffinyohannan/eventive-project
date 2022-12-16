@@ -48,13 +48,13 @@ function Event({company}) {
         //         'content-type': 'multipart/form-data',
         //     }
         // }
-        console.log(formData, '@@@@@@@@@');
+        // console.log(formData, '@@@@@@@@@');
         // try {
         //     const {data} = await postEvent(formData)
         // } catch (error) {
         //     console.log(error.message);
         // }
-        axios.post('http://localhost:5000/company/addEvent', formData).then((response) => {
+        axios.post('/company/addEvent', formData).then((response) => {
             console.log('image added');
             console.log(response.data);
             if (response.data.event) {

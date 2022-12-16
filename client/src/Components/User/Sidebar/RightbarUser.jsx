@@ -45,7 +45,7 @@ function RightbarUser(props) {
                         <div className=' flex justify-between py-2 px-4 mb-3 h-16 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
                             <div className='flex'>
                             <div className='m-1 '>
-                                <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full' width={32} alt="" />
+                                <img src={'/images/' + obj.profilePicture} className='rounded-full' width={32} alt="" />
                             </div>
                             <div className='ml-3'>
                                 <Link to={`/profile/company/${obj._id}`} className='text-md font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>

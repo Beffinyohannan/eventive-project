@@ -20,8 +20,8 @@ function Post({ obj, setBlock, company, user }) {
 
     const [likes, setlikes] = useState(false)
     const [count, setCount] = useState(obj.likes.length)
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER
-    console.log(PF, 'asdfghjxcvbnmwertyui');
+    // const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    // console.log(PF, 'asdfghjxcvbnmwertyui');
     const { userDetails } = useContext(UserContext)
     console.log(user, '00000000000000');
     
@@ -49,6 +49,7 @@ function Post({ obj, setBlock, company, user }) {
             const data = res.data[0]
             //  console.log(data.comments,'222222222222222222222222222222222');
             setViewAllComment(res.data[0].comments)
+            console.log(viewAllComment,'&&&&&&&&&&');
         })
     }, [viewCmt])
 
@@ -151,7 +152,7 @@ function Post({ obj, setBlock, company, user }) {
             <div className='p-5 bg-white   rounded-t-2xl border-slate-200 border-t shadow-md'>
                 <div className='flex justify-between'>
                     <div className='flex items-center space-x-2'>
-                        <img src={PF + obj.companyId.profilePicture} className='rounded-full' width={40} height={40} alt="" />
+                        <img src={'/images/' + obj.companyId.profilePicture} className='rounded-full' width={40} height={40} alt="" />
                         <div>
                             {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                             {company?
@@ -175,7 +176,7 @@ function Post({ obj, setBlock, company, user }) {
                 <p className='pt-4'>{obj.description}</p>
             </div>
             <div className='relative w-full   bg-white '>
-                <img className='object w-[800px] h-[350px]' src={'http://localhost:5000/images/' + obj.image} alt="" />
+                <img className='object w-[800px] h-[350px]' src={'/images/' + obj.image} alt="" />
             </div>
 
             <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>

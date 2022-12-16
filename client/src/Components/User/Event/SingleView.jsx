@@ -53,7 +53,7 @@ function SingleView({ company }) {
         <div className='w-full h-96 sm:p-2 '
         //  style={{ backgroundImage: `URL('https://imgs.search.brave.com/xDC2eSrEPNnxYNxdVbV6P_QQHY4D8TcRne76bTbmufk/rs:fit:711:225:1/g:ce/aHR0cHM6Ly90c2Ux/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5P/UEl6VjZSY054a0ZJ/aTM1Q3ZGRnpRSGFF/OCZwaWQ9QXBp')`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundPositionY: 'center' }}
         >
-          <img className='w-full h-96' src={'http://localhost:5000/images/' + details.image} />
+          <img className='w-full h-96' src={'/images/' + details.image} />
         </div>
         <div className='flex'>
           <div className="w-full px-4 py-3 flex  justify-start">

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const company = require('../company/companySchema')
 // const User = require('../user/loginSchema');
 const Company = require('../company/companySchema')
 
@@ -36,6 +37,7 @@ const postSchema = mongoose.Schema({
             },
             postedBy:{
                 type:String,
+               
             },
             name:{
                 type:String
