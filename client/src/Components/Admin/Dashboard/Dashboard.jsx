@@ -25,8 +25,11 @@ function Dashboard() {
             borderWidth:2,
           }]
         })
-
         console.log(datas, '*********');
+        console.log(Object.keys(datas).length,'+++++++++++');
+
+
+        
       } catch (error) {
         console.log(error.message);
       }
@@ -67,10 +70,9 @@ function Dashboard() {
 
   }, [])
 
-  
 
   return (
-    <div className='w-full'>
+    <div className='w-full mt-8'>
       <div className='pt-5 '>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 px-10">
           <div class="overflow-hidden group relative rounded-lg p-[1px] flex justify-center items-center">
@@ -116,9 +118,12 @@ function Dashboard() {
 
 
       </div>
-      <div className='w-4/5 pl-10 pt-10'>
+      <div className='w-4/5 pl-10 pt-16'>
         <h1 className='font-semibold'>Daily Post Count</h1>
+        {Object.keys(datas).length !==0 ?
         <BarChart chartData={datas} />
+        :''}
+        {/* <BarChart chartData={datas} /> */}
       </div>
     </div>
   )

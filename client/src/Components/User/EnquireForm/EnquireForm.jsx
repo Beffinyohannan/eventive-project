@@ -75,6 +75,11 @@ function EnquireForm() {
         navigate('/inbox')
     }
 
+    const handleClose =()=>{
+        setShowModal(false)
+        setCom('')
+    }
+
     return (
         <div className=' flex justify-center md:justify-end'>
 
@@ -191,7 +196,7 @@ function EnquireForm() {
                                 <div
                                     className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none "
                                 >
-                                    <div className="relative w-3/5 md:w-2/5 my-6 mx-auto max-w-3xl">
+                                    <div className="relative w-full sm:w-3/5 md:w-2/5 my-6 mx-auto max-w-3xl">
                                         {/*content*/}
                                         <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                             {/*header*/}
@@ -199,7 +204,7 @@ function EnquireForm() {
                                                 <h3 className="text-xl font-semibold">send to companies</h3>
                                                 <button
                                                     className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                    onClick={() => setShowModal(false)}
+                                                    onClick={handleClose}
                                                 >
                                                     <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
                                                         ×
@@ -213,11 +218,11 @@ function EnquireForm() {
                                                 {state.map((obj) => {
                                                     return (
 
-                                                        <div className="relative p-1 w-full flex-auto">
+                                                        <div className="relative p-1 w-full flex-auto ">
                                                             <div className=' flex justify-between  py-2 px-4  h-16 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
                                                                 <div className='m-1 ml-3 flex'>
                                                                     <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full' width={38} alt="" />
-                                                                    <div>
+                                                                    <div className=''>
                                                                         <h1 className='text-md md:text-lg font-medium  ml-5  cursor-pointer'>{obj.companyName}</h1>
                                                                         <p className='pl-5 text-sm '>{obj.email}</p>
                                                                     </div>
@@ -225,8 +230,8 @@ function EnquireForm() {
 
                                                                 <div className='mt-1'>
                                                                     {com.includes(obj._id) ? 
-                                                                    <p className='font-semibold p-2'>sended</p>:
-                                                                    <p className='ml-4 my-1  bg-slate-900 text-white px-4 py-0.5 rounded-xl' onClick={(e) => { handleCompany(obj._id) }}  > send</p>
+                                                                    <p className='font-semibold p-2'>selected</p>:
+                                                                    <p className='ml-4 my-1  bg-slate-900 text-white px-4 py-0.5 rounded-xl' onClick={(e) => { handleCompany(obj._id) }}  > select</p>
                                                                     }
                                                                     {/* <input type="checkbox" className="border-sky-400 " name='company' value={obj._id} checked={formValues.company} onChange={handleChange} /> */}
                                                                 </div>
@@ -238,7 +243,7 @@ function EnquireForm() {
                                             </div>
                                             <div className='flex justify-end pb-2 pr-1'>
 
-                                                <button className=" rounded-full  p-1 w-full sm:w-32   bg-gradient-to-r from-sky-600  to-teal-300 text-white text-center text-lg font-semibold " onClick={handleSubmit}>Done</button>
+                                                <button className=" rounded-full  p-1 w-32   bg-gradient-to-r from-sky-600  to-teal-300 text-white text-center text-lg font-semibold " onClick={handleSubmit}>Send</button>
                                             </div>
 
                                         </div>

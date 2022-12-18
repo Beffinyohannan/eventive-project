@@ -1,4 +1,5 @@
-const { login, signup, viewCompanies, viewPosts, likePost, commentPost, uncommentPost, viewComments, follow, getProfile, eventEnquire, inboxView, cancelEnquiry, getUserDetail, getQuotation, approveQutations, rejectQutations, reportPost, sendUserOtp, resendOtp, verifyOtp } = require('../controller/userController')
+const { login, signup, viewCompanies, viewPosts, likePost, commentPost, uncommentPost, viewComments, follow, getProfile, eventEnquire, inboxView, cancelEnquiry, getUserDetail, getQuotation, approveQutations, rejectQutations, reportPost, sendUserOtp, resendOtp, verifyOtp, userProfileEdit, searchCompany } = require('../controller/userController')
+const multer = require('../helper/multer')
 
 const router = require('express').Router()
 
@@ -27,9 +28,10 @@ router.get('/userDetail/:id',getUserDetail)
 router.post('/report-post/:id',reportPost)
 
 router.post('/signup/sendOtp',sendUserOtp)
-
 router.post('/signup/otp/resend',resendOtp)
-
 router.post('/singnUp/otp/verify',verifyOtp)
+
+router.post('/edit-profile/:id',multer.single("profilePicture"),userProfileEdit)
+router.get('/user/search/:id',searchCompany)
 
 module.exports= router

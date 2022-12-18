@@ -35,7 +35,7 @@ function InboxUser() {
 
 
     return (
-        <div className=' flex md:justify-end bg-slate-50'>
+        <div className=' flex md:justify-end mt-5 bg-slate-50'>
             <section className=" w-full md:w-10/12 lg:w-10/12 antialiased  text-gray-600 h-screen pl-8">
                 <div className="flex flex-col  justify-center pt-20  px-5  ">
                     <div className="w-full mb-5   lg:w-4/5 mx-auto px-5 py-2 bg-white shadow-lg rounded-sm border border-gray-200">

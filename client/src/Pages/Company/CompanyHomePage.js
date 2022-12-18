@@ -13,7 +13,7 @@ function CompanyHomePage() {
                 <HeaderCompany />
                 <CompanySidebar />
                 <div className=' flex justify-center md:justify-end bg-slate-50'>
-                    <div className='w-full sm:w-4/5  flex justify-center lg:justify-start '>
+                    <div className='w-full sm:w-4/5  flex justify-center lg:justify-end xl:justify-start '>
                        
                         <PostCompanySide/>
                     </div>

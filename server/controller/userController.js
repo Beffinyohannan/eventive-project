@@ -52,7 +52,7 @@ const sendUserOtp = async (req, res) => {
 
     try {
         const usedData = await User.findOne({ $or: [{ email }, { username }] })
-        const comData = await company.findOne({ $or: [{ email }, { companyName:username }] })
+        const comData = await company.findOne({ $or: [{ email }, { companyName: username }] })
         if (usedData) {
             console.log('1');
             if (usedData.username === username) {
@@ -62,7 +62,7 @@ const sendUserOtp = async (req, res) => {
                 console.log('3');
                 res.json({ message: "Email already Registered, Please Login" })
             }
-        }else if(comData){
+        } else if (comData) {
             console.log('4');
             if (comData.companyName === username) {
                 console.log('5');
@@ -122,6 +122,7 @@ const otpGenerate = async (email, res) => {
             text: `Hello User Your six digit OTP for authentication is ${OTP} `, // plain text body
             html: `<p>Hello User Your six digit OTP for authentication is <b>${OTP}</b></p>`, // html body
         })
+        console.log(info, "11111111111111111111111");
 
         if (info.messageId) {
             console.log('in ifffffff');
@@ -218,16 +219,30 @@ const viewCompanies = (req, res) => {
 
 /* ------------------------- view post of companies ------------------------- */
 
-const viewPosts = (req, res) => {
-    console.log(req.params.id);
-    post.find({ 'reports.reportedBy': { $ne: req.params.id }, status: true }).populate('companyId').sort({ date: -1 }).then((data) => {
-        console.log(data, '++++++++++++++');
+const viewPosts =async (req, res) => {
+    // console.log(req.params.id);
+    try {
+        const user = await User.findById(req.params.id)
+        // const myPost = await Post.find({userId:req.params.id,status:'active'}).sort({createdAt:-1})
+        const feedPosts = await Promise.all(user.following.map((id)=>{
+        return post.find({companyId:id, 'reports.reportedBy': { $ne: req.params.id }, status: true }).populate('companyId').sort({ date: 1 })
+        })) 
+        // console.log(feedPosts);
+        if(feedPosts){
+           res.json([].concat(...feedPosts))
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.json(error.message)
+    }
+    // post.find({ 'reports.reportedBy': { $ne: req.params.id }, status: true }).populate('companyId').sort({ date: -1 }).then((data) => {
+    //     // console.log(data, '++++++++++++++');
 
-        res.json(data)
-    }).catch((err) => {
-        console.log(err.message);
-        res.json(err.message)
-    })
+    //     res.json(data)
+    // }).catch((err) => {
+    //     console.log(err.message);
+    //     res.json(err.message)
+    // })
 }
 
 /* ------------------------------ like the post ----------------------------- */
@@ -240,7 +255,7 @@ const likePost = async (req, res) => {
 
     try {
         const posts = await post.findById(req.params.id)
-        console.log(posts, 'kkkkkk');
+        // console.log(posts, 'kkkkkk');
 
         if (!posts.likes.includes(userId)) {
             // if(posts.likes.length == 0){
@@ -469,6 +484,63 @@ const reportPost = async (req, res) => {
     }
 }
 
+/* ---------------------------- user profile edit --------------------------- */
+
+const userProfileEdit = async (req, res) => {
+    try {
+        // console.log(req.params.id);
+        // console.log(req.body);
+        const editUser = await User.findById(req.params.id)
+        // console.log(editUser, 'pppppppppppppp');
+        console.log(req.file);
+        
+        if (editUser) {
+            if (req.file) {
+                var file = true
+            } else {
+                var file = false
+            }
+            // console.log(file);
+            const edit = await User.updateOne({ _id: req.params.id },
+                {
+                    $set: {
+                        profilePicture: file ? req.file.filename : editUser.profilePicture,
+                        username: req.body.username,
+                        email: req.body.email,
+                        phone: req.body.phone,
+                        address: req.body.address
+
+                    }
+                })
+                // console.log(edit,'kkkkkkkkkk');
+            if (edit) {
+                res.status(200).json({ Update: true, msg: "Updated Successfully " });
+            } else {
+                res.status(500).json({ Update: false, msg: "Update not done" });
+            }
+        }
+    } catch (error) {
+        res.json(error.message)
+    }
+}
+
+/* ----------------------------- SEARCH FOR USER ---------------------------- */
+
+const searchCompany = async (req, res) => {
+    console.log(req.params.id, "uuiiid")
+    const data = req.params.id
+    try {
+       const users = await company.find(
+          { companyName: { $regex: "^" + data, $options: "i" } },
+          { _id:1, email: 1, companyName: 1, profilePicture: 1, companyType: 1 }
+       )
+       res.status(200).json(users)
+    } catch (error) {
+       console.log(error)
+       res.status(500).json(error)
+    }
+ }
+
 module.exports = {
     signup,
     sendUserOtp,
@@ -490,6 +562,8 @@ module.exports = {
     getQuotation,
     approveQutations,
     rejectQutations,
-    reportPost
+    reportPost,
+    userProfileEdit,
+    searchCompany
 
 }

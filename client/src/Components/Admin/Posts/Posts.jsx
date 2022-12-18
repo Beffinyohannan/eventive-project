@@ -12,7 +12,7 @@ function Posts() {
 
   const [state, setState] = useState([])
   const [block, setBlock] = useState(false)
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER
+  // const PF = process.env.REACT_APP_PUBLIC_FOLDER
   // console.log(PF,"pfff");
 
 
@@ -221,7 +221,7 @@ function Posts() {
 
                               <div class="flex-shrink-0 w-10 h-10">
                                 <img class="w-full h-full rounded-full"
-                                  src={PF + obj.image}
+                                  src={'/images/' + obj.image}
                                   alt="" />
                               </div>
                               <div class="ml-3">

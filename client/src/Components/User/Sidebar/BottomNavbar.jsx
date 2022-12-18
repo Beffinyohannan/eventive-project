@@ -17,7 +17,7 @@ function BottomNavbar() {
     const [active,setActive]=useState()
 
   return (
-    <div className='bg-slate-100 max-h-[4.4rem] px-6 pb-5 rounded-t-xl md:hidden fixed inset-x-0 bottom-0'>
+    <div className='bg-slate-100 max-h-[4.4rem] px-6 pb-5 rounded-t-xl md:hidden fixed inset-x-0 bottom-0 '>
         <ul className='flex relative justify-between'>
                 {/* <span className={`bg-rose-600 duration-500 ${Menus[active].dis} border-4 border-white h-16 w-16  -top-5 rounded-full`}></span> */}
 

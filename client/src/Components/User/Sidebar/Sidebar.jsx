@@ -25,10 +25,6 @@ function Sidebar() {
 
 
     const logout = (() => {
-        console.log('gfdghsfgdfjgjhkj');
-        // removeCookie("admin-token")
-        // alert('Logout Sucessfully')
-        // window.location.href="/admin-login"
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to Logout.',
@@ -38,8 +34,6 @@ function Sidebar() {
                     onClick: () => {
                         localStorage.removeItem('token')
                         localStorage.removeItem('user')
-                        // setUserDetails('')
-                        //    navigate("/admin-login")
                         Swal.fire({
                             position: 'top-end',
                             icon: 'success',
@@ -53,7 +47,6 @@ function Sidebar() {
                 },
                 {
                     label: 'No',
-                    // onClick: () => alert('Click No')
                 }
             ]
         });
@@ -72,28 +65,27 @@ function Sidebar() {
                     {/* <HiMenuAlt3 size={26} className="cursor-pointer" onClick={()=>setOpen(!open)} />  */}
                 </div>
             </div>
-            <div className='mt-4 flex flex-col gap-4 relative'>
+            <div className='mt-4 flex flex-col gap-5 relative'>
                 {
                     Menus?.map((menu, i) => (
-                        <Link to={menu?.link} key={i} className="group flex items-center text-sm lg:text-lg gap-3.5 font-medium p-2 hover:bg-gray-200 rounded-md" >
+                        <Link to={menu?.link} key={i} className="group flex items-center text-sm lg:text-lg gap-4 font-medium p-2 hover:bg-gray-200 rounded-md" >
                             <div>{React.createElement(menu?.icon, { size: "24" })}</div>
                             <h2
                                 style={{ transitionDelay: `${i + 2}00ms`, }}
                                 className={`whitespace-pre duration-500 ${!open && 'opacity-0 translate-x-28 overflow-hidden'} `} >{menu?.name}</h2>
                             <h2 className={`${open && 'hidden'} absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 
-                     w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit `}>
+                                 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit `}>
                                 {menu?.name}
                             </h2>
                         </Link>
                     ))
                 }
-                <button
+                {/* <button
                     class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-900 border border-transparent rounded-lg active:bg-green-700 hover:bg-green-800 focus:outline-none focus:shadow-outline-purple"
                     onClick={logout}
                 >
                     Logout
-                    {/* <span class="ml-2" aria-hidden="true">+</span> */}
-                </button>
+                </button> */}
             </div>
         </div>
     )

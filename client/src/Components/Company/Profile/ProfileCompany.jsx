@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from '../../../api/axios';
-import { CompanyContext } from '../../../Store/CompanyContext';
+// import { CompanyContext } from '../../../Store/CompanyContext';
 import { AiOutlineHeart, AiOutlinePlus, AiFillHeart } from 'react-icons/ai'
 import { FaRegComment, FaRegHeart, FaEllipsisV } from 'react-icons/fa'
 import { FcLike } from "react-icons/fc"
@@ -8,33 +8,36 @@ import { FcLike } from "react-icons/fc"
 import { FiSend } from 'react-icons/fi'
 import { BsBookmark, BsEmojiSmile, BsThreeDots } from 'react-icons/bs'
 import { format } from 'timeago.js'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function ProfileCompany({ company }) {
 
-    const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
+    // const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
+    const [details,setDetails]= useState('')
     // console.log(companyDetails, 1223123);
     const companyId = useParams().id
     const [post, setPost] = useState([])
     // console.log(post,'##########');
-    const PF = process.env.REACT_APP_PUBLIC_FOLDER
+    // const PF = process.env.REACT_APP_PUBLIC_FOLDER
     const [showSecondModal, setShowSecondModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [modalData, setModalData] = useState({});
     const [approve, setApprove] = useState(false)
     const [open, setOpen] = useState(false);
     const [Image, setImage] = useState("");
-    const [profile, setProfile] = useState({
-        //   username: userData.username,
-        //   bio: userData.bio,
-        //   profilePicture: "",
-        //   phone: userData.phone,
-    });
+    const navigate = useNavigate()
 
     const handleOpen = () => {
         setOpen(!open);
     };
+    
+    const handleEditModal=()=>{
+        setShowEditModal(false)
+        setImage('')
+    }
 
     const showPost = (id) => {
         post.filter((obj) => {
@@ -54,42 +57,42 @@ function ProfileCompany({ company }) {
     useEffect(() => {
         axios.get(`/company/profile/${companyId}`).then((res) => {
             console.log(res.data, 'gggggggggggggg');
-            setCompanyDetails(res.data)
+            setDetails(res.data)
         })
 
         axios.get(`/company/profile-post/${companyId}`).then((post) => {
             console.log(post);
             setPost(post.data)
         })
-    }, [approve,companyId])
+    }, [approve,showEditModal])
 
 
     const handleProfile = (e) => {
         const { name, value } = e.target;
-        setCompanyDetails({
-            ...companyDetails,
+        setDetails({
+            ...details,
             [name]: value,
         });
 
-        console.log(companyDetails);
+        console.log(details);
     };
 
     const fileUpload = (e) => {
         console.log("file upload ann");
         setImage(URL.createObjectURL(e.target.files[0]));
 
-        setCompanyDetails({
-            ...companyDetails,
+        setDetails({
+            ...details,
             profilePicture: e.target.files[0],
         });
     };
 
     const handleEdit = (e) => {
         e.preventDefault()
-        console.log(companyDetails, '77777777777777');
+        console.log(details, '77777777777777');
         const formData = new FormData();
-        for (let key in companyDetails) {
-            formData.append(key, companyDetails[key]);
+        for (let key in details) {
+            formData.append(key, details[key]);
         }
         // console.log(formData, '||||||||||||||||||||');
 
@@ -110,21 +113,40 @@ function ProfileCompany({ company }) {
 
     const handleDelete = (id) => {
         console.log(id);
-        axios.delete(`/company/delete-post/${id}`).then((res) => {
-            console.log(res.data);
-            if (res.data.deleted == true) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Post deleted sucessfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                setShowSecondModal(false)
-                setApprove(!approve)
 
-            }
-        })
+        confirmAlert({
+            title: 'Confirm to submit',
+            message: 'Are you sure to Delete Post.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        axios.delete(`/company/delete-post/${id}`).then((res) => {
+                            console.log(res.data);
+                            if (res.data.deleted == true) {
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Post deleted sucessfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                setShowSecondModal(false)
+                                setApprove(!approve)
+                
+                            }
+                        })
+                       
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick:()=>{setOpen(false)}
+                }
+            ]
+        });
+
+        
     }
 
 
@@ -143,16 +165,16 @@ function ProfileCompany({ company }) {
                                     <div className='flex '>
                                         <div className="w-full px-4 py-3 flex  justify-start">
                                             <div className="relative">
-                                                <img src={ PF + companyDetails.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
+                                                <img src={ '/images/' + details?.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
                                                 {/* <img alt="..." src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg" className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"/> */}
                                             </div >
                                             <div className='ml-5 pt-2 '>
-                                                <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">{companyDetails.companyName}</h3>
-                                                <p>{companyDetails.email}</p>
+                                                <h3 className="text-xl font-semibold leading-normal  text-blueGray-700 mb-2">{details?.companyName}</h3>
+                                                <p>{details?.email}</p>
                                                 <div className='flex gap-5'>
                                                     <div className='flex gap-3 pt-2'>
 
-                                                        <h4 className='font-semibold'>{companyDetails.followers.length}</h4>
+                                                        <h4 className='font-semibold'>{details?.followers?.length}</h4>
                                                         <p>followers</p>
                                                     </div>
                                                     <div className='flex gap-3 pt-2'>
@@ -176,10 +198,10 @@ function ProfileCompany({ company }) {
                                             {/* {userDetails.username} */}
                                             About
                                         </h3>
-                                        <p>Company Type : {companyDetails.companyType}</p>
-                                        <p>Phone : {companyDetails.phone}</p>
-                                        <p>Register No. : {companyDetails.registerNo}</p>
-                                        <p> Address : {companyDetails.companyAddress}</p>
+                                        <p>Company Type : {details?.companyType}</p>
+                                        <p>Phone : {details?.phone}</p>
+                                        <p>Register No. : {details?.registerNo}</p>
+                                        <p> Address : {details?.companyAddress}</p>
 
                                     </div>
                                     <div className="w-full px-4 text-center mt-1">
@@ -204,7 +226,7 @@ function ProfileCompany({ company }) {
                                             {
                                                 post.map((obj, index) => {
                                                     return (
-                                                        <img className='w-64 h-24 sm:h-40' src={ PF + obj.image} onClick={(e) => { showPost(obj._id) }} />
+                                                        <img className='w-80 h-24 md:h-52' src={ '/images/' + obj.image} onClick={(e) => { showPost(obj._id) }} />
 
                                                     )
                                                 })
@@ -235,7 +257,7 @@ function ProfileCompany({ company }) {
                                                                                     <div className='flex justify-between'>
                                                                                         <div className='flex items-center space-x-2'>
 
-                                                                                            <img src={PF + modalData.profilePicture} className='rounded-full' width={40} height={40} alt="" />
+                                                                                            <img src={'/images/' + modalData.profilePicture} className='rounded-full' width={40} height={40} alt="" />
                                                                                             <div>
                                                                                                 {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                                                                                                 <p className='font-medium'>{modalData.name}</p>
@@ -260,7 +282,7 @@ function ProfileCompany({ company }) {
                                                                                     <p className='pt-4'>{modalData.description}</p>
                                                                                 </div>
                                                                                 <div className='relative w-full   bg-white '>
-                                                                                    <img className='object w-[800px] h-[300px]' src={ PF + modalData.image} alt="" />
+                                                                                    <img className='object w-[800px] h-[300px]' src={ '/images/' + modalData.image} alt="" />
                                                                                 </div>
 
                                                                                 <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>
@@ -390,7 +412,7 @@ function ProfileCompany({ company }) {
                                                             </h3>
                                                             <button
                                                                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                                onClick={() => setShowEditModal(false)}
+                                                                onClick={ handleEditModal}
                                                             >
                                                                 <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                                                                     ×
@@ -398,29 +420,12 @@ function ProfileCompany({ company }) {
                                                             </button>
                                                         </div>
                                                         <div className="relative p-6 flex-auto">
-                                                            <label className="p-2 font-semibold text-blue-400" htmlFor=""> Username:</label>
+                                                            <label className="p-2 font-semibold text-blue-400" htmlFor=""> Company Name:</label>
                                                             <input
                                                                 type="text"
                                                                 name="companyName"
-                                                                value={companyDetails.companyName}
+                                                                value={details.companyName}
                                                                 placeholder="Change Username"
-                                                                onChange={handleProfile}
-                                                            />
-                                                            <label className="p-2 font-semibold text-blue-400" htmlFor=""> Profile Picture:</label>
-                                                            <input
-                                                                className="ml-5"
-                                                                type="file"
-                                                                name="profilePicture"
-                                                                id="file"
-                                                                onChange={fileUpload}
-                                                            />
-                                                            <br /> <br />
-                                                            <label className="p-2 font-semibold text-blue-400" htmlFor=""> Contact-No:</label>
-                                                            <input
-                                                                type="number"
-                                                                name="phone"
-                                                                value={companyDetails.phone}
-                                                                placeholder="Contact-No"
                                                                 onChange={handleProfile}
                                                             />
                                                             <label className="p-2 font-semibold text-blue-400" htmlFor="" > Email: </label>
@@ -428,16 +433,35 @@ function ProfileCompany({ company }) {
                                                                 className='w-60'
                                                                 type="email"
                                                                 name="email"
-                                                                value={companyDetails.email}
+                                                                value={details.email}
                                                                 placeholder="Email"
                                                                 onChange={handleProfile}
                                                             />
                                                             <br /> <br />
+                                                            <label className="p-2 mt-3 font-semibold text-blue-400" htmlFor=""> Profile Picture:</label>
+                                                            <img src={Image} alt="" className='w-32' />
+                                                            <input
+                                                                className=""
+                                                                type="file"
+                                                                name="profilePicture"
+                                                                id="file"
+                                                                onChange={fileUpload}
+                                                            />
+                                                             <label className="p-2 font-semibold text-blue-400" htmlFor=""> Contact-No:</label>
+                                                            <input
+                                                                type="number"
+                                                                name="phone"
+                                                                value={details.phone}
+                                                                placeholder="Contact-No"
+                                                                onChange={handleProfile}
+                                                            />
+                                                            <br /> <br />
+                                                           
                                                             <label className="p-2 font-semibold text-blue-400" htmlFor="" > Company Type:</label>
                                                             <input
                                                                 type="text"
                                                                 name="companyType"
-                                                                value={companyDetails.companyType}
+                                                                value={details.companyType}
                                                                 placeholder="Company-Type"
                                                                 onChange={handleProfile}
                                                             />
@@ -445,7 +469,7 @@ function ProfileCompany({ company }) {
                                                             <input
                                                                 type="text"
                                                                 name="companyAddress"
-                                                                value={companyDetails.companyAddress}
+                                                                value={details.companyAddress}
                                                                 placeholder="Address"
                                                                 onChange={handleProfile}
                                                             />
@@ -456,7 +480,7 @@ function ProfileCompany({ company }) {
                                                             <button
                                                                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                                                 type="button"
-                                                                onClick={() => setShowEditModal(false)}
+                                                                onClick={ handleEditModal}
                                                             >
                                                                 Close
                                                             </button>

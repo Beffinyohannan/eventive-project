@@ -159,6 +159,9 @@ const postGraphInfo = async (req, res) => {
                 }
             },
             {
+                $limit:7
+            },
+            {
                 $sort:{_id:1}
             }
         ])

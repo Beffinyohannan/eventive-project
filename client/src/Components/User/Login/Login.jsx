@@ -48,6 +48,7 @@ function Login() {
       if (data.state == "ok") {
         window.localStorage.setItem("token",data.data)
         window.localStorage.setItem("user", JSON.stringify(userr))
+        setUserDetails(userr)
         Swal.fire({
           position: 'top-end',
           icon: 'success',

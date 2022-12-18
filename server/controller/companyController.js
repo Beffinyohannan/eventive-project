@@ -163,12 +163,15 @@ const quotation = async (req, res) => {
         // console.log(req.query);
         const userId = req.query.userId
         const companyId = req.query.companyId
+        const enquiryId = req.query.enquiryId
         let { foodAmount, venueAmount, programmeAmount, lightAmount, guestAmount, cameraAmount, anchorAmount, note, username } = req.body
         const eventQuotation = await new Quotation({
             foodAmount, venueAmount, programmeAmount, lightAmount, guestAmount, cameraAmount, anchorAmount, note, userId, companyId, username
         })
 
+
         await eventQuotation.save()
+        const result = await Enquire.updateOne({_id:enquiryId},{$set:{status:"replayed"}})
         console.log('success');
         res.status(200).json({ form: 'sended' })
 

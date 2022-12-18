@@ -121,10 +121,10 @@ function PostCompanySide() {
 
 
     return (
-        <div className='w-full sm:w-4/5 pt-24 flex flex-col items-center lg:justify-start '>
-            <div className=' sm:w-full  lg:w-10/12  flex flex-col items-center   '>
-                <div className='flex flex-col items-center lg:pl-12 xl:pl-0 xl:pr-28'>
-                    <div className='p-5 md:mx-12 lg:mx-16 xl:mx-24 bg-white  mt-3 mb-5 rounded-2xl border-slate-200 border-t shadow-md '>
+        <div className='w-full mb-24 sm:w-4/5 pt-24 flex flex-col items-center lg:justify-start '>
+            {/* <div className=' sm:w-full  lg:w-10/12  flex flex-col items-center   '> */}
+                {/* <div className='flex flex-col items-center lg:pl-12 xl:pl-0 xl:pr-28'> */}
+                    <div className='p-5 md:mx-12 lg:mx-16 xl:mx-52 bg-white  mt-3 mb-5 rounded-2xl border-slate-200 border-t shadow-md '>
                         <div className='flex items-center space-x-2'>
                             {/* <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full ' width={40} height={40} alt="" /> */}
                             <div>
@@ -166,8 +166,8 @@ function PostCompanySide() {
 
                         <Post obj={obj} setBlock={setBlock} company={true} />
                     ))}
-                </div>
-            </div>
+                {/* </div> */}
+            {/* </div> */}
         </div>
 
     )

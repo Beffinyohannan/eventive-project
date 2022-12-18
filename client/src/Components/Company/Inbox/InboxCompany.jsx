@@ -55,7 +55,7 @@ function InboxCompany() {
                             (rej ?
                                 <div>
                                     {
-                                        state.filter(obj => obj.status == 'accepted').map((obj, index) => {
+                                        state.filter(obj => obj.status == 'accepted' || obj.status == 'replayed' ).map((obj, index) => {
                                             return (
                                                 <InboxDetails approved={true} data={obj} />
                                             )

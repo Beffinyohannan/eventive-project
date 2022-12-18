@@ -2,12 +2,12 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import axios from '../../../api/axios'
 import { UserContext } from '../../../Store/UserContext'
-function RightbarUser(props) {
+function RightbarUser() {
 
     const [state, setState] = useState([])
     const [block, setBlock] = useState(false)
     const { userDetails } = useContext(UserContext)
-    const userId = userDetails._id
+    const userId = userDetails?._id
     const [follow,setFollow] = useState(false)
 
 
@@ -34,8 +34,9 @@ function RightbarUser(props) {
     }
 
     return (
-        <div className='bg-slate-100 w-80 pt-20 px-5 h-full hidden xl:block fixed right-0 top-0'>
-            <h1 className='mb-3'>Sugesstions</h1>
+        <div className='bg-slate-100 w-80 pt-28 px-5 h-full hidden xl:block fixed right-0 top-0'>
+            
+            <h1 className='mb-3 '>Sugesstions</h1>
             {
                 state.map((obj, index) => {
 

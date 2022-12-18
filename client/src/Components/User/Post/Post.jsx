@@ -146,9 +146,15 @@ function Post({ obj, setBlock, company, user }) {
         }
     }
 
+    const handleClose =()=>{
+        setShowModal(false)
+        setOpen(false)
+    }
+
     return (
 
-        <div className='flex flex-col mt-3 mb-3   w-full md:w-4/5 lg:w-9/12 xl:w-4/6 border rounded-2xl '>
+        <div className='flex flex-col mt-3 mb-3   w-full md:w-4/5 lg:w-9/12 xl:w-3/6 border rounded-2xl '>
+            
             <div className='p-5 bg-white   rounded-t-2xl border-slate-200 border-t shadow-md'>
                 <div className='flex justify-between'>
                     <div className='flex items-center space-x-2'>
@@ -280,7 +286,7 @@ function Post({ obj, setBlock, company, user }) {
                                 </h3>
                                 <button
                                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                    onClick={() => setShowModal(false)}
+                                    onClick={handleClose}
                                 >
                                     <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                                         ×
@@ -316,7 +322,7 @@ function Post({ obj, setBlock, company, user }) {
                                 <button
                                     className="text-gray-500 background-transparent font-bold uppercase px-6  text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                     type="button"
-                                    onClick={() => setShowModal(false)}>
+                                    onClick={handleClose}>
                                     Close
                                 </button>
                                 <button class="bg-cyan-600 hover:bg-red-400 text-white font-bold py-1 px-4 rounded inline-flex items-center disabled:bg-cyan-100"

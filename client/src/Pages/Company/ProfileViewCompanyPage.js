@@ -9,7 +9,7 @@ function ProfileViewCompanyPage() {
     <div>
         <HeaderCompany/>
         <CompanySidebar/>
-        <ProfileCompany/>
+        <ProfileCompany />
         <CompanyBottomNavbar/>
     </div>
   )

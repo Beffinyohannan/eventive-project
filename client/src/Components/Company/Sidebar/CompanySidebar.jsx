@@ -12,7 +12,7 @@ import { CompanyContext } from '../../../Store/CompanyContext'
 
 function CompanySidebar() {
     const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
-     const companyId = companyDetails._id
+     const companyId = companyDetails?._id
      console.log(companyId);
 
     const Menus = [

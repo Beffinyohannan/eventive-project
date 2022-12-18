@@ -11,11 +11,11 @@ function HomePage() {
     <div >
         <Header/>
         <Sidebar />
-        <div className=' flex justify-center md:justify-end bg-slate-50'>
-        <div className='w-full sm:w-4/5  flex justify-center lg:justify-start '>
+        <div className=' flex min-h-screen justify-center md:justify-end bg-slate-50'>
+        <div className='w-full sm:w-4/5  flex justify-center lg:justify-end xl:justify-start '>
         <Feed/>
         </div>
-        <RightbarUser/>
+        {/* <RightbarUser/> */}
         </div>
         <BottomNavbar/>
         

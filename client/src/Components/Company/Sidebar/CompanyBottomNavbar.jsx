@@ -1,16 +1,21 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import { Link } from 'react-router-dom'
 import {HiMenuAlt3,HiOutlineBell,HiOutlineCog,HiOutlineClipboardList,HiOutlineGlobeAlt,HiOutlineTable,HiUserCircle} from 'react-icons/hi'
 import {AiOutlineHome} from 'react-icons/ai'
+import { CompanyContext } from '../../../Store/CompanyContext'
 
 function CompanyBottomNavbar() {
 
+    const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
+     const companyId = companyDetails?._id
+
     const Menus=[
+        {name:'Notification',link:'/company/inbox',icon:HiOutlineBell},
         {name:'Home',link:'/company/homepage',icon:AiOutlineHome},
-        {name:'Notification',link:'#',icon:HiOutlineBell},
         // {name:'Add Post',link:'/companies',icon:HiOutlineGlobeAlt},
-        {name:'Profile',link:'/company/profile',icon:HiUserCircle},
-        {name:'Settings',link:'#',icon:HiOutlineCog},
+        // {name:'Profile',link:`/company/profile/${companyId}`,icon:HiUserCircle},
+        { name: 'Events', link: '/company/events', icon: HiOutlineTable },
+        // {name:'Settings',link:'#',icon:HiOutlineCog},
         // {name:'Enquire Event',link:'#',icon:HiOutlineClipboardList},
     ]
 
@@ -25,8 +30,8 @@ function CompanyBottomNavbar() {
         {Menus.map((menu,i)=>(
             <li key={i} className="w-16" onClick={()=>setActive(i)}>
                 <Link to={menu?.link} className='flex flex-col  pt-6' >
-                <span className={`text-xs ${active === i ? "translate-y-4 duration-700 opacity-100" : "opacity-0 translate-y-10 hidden"}` }>{menu.name}</span>
                 <span className={`text-xl pl-2 cursor-pointer duration-500 ${i=== active && "-mt-6 text-blue-900"}`}>{React.createElement(menu?.icon,{size:"20"})}</span>
+                <span className={`text-xs ${active === i ? "translate-y-4 duration-700 opacity-100" : "opacity-0 translate-y-10 hidden"}` }>{menu.name}</span>
 
                 </Link>
             </li>
