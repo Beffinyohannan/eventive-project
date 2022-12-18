@@ -1,8 +1,7 @@
 
 const io = require('socket.io')(8800,{
     cors:{
-        // origin:"http://localhost:3000"
-        origin:"https://eventive.tk/"
+        origin:process.env.FRONT_END
     }
 })
 

@@ -12,11 +12,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import nopost from '../../../assets/camera.png'
 
-function ProfileCompany({ company }) {
+
+function ProfileCompany({ company, userId }) {
 
     // const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
-    const [details,setDetails]= useState('')
+    const [details, setDetails] = useState('')
     // console.log(companyDetails, 1223123);
     const companyId = useParams().id
     const [post, setPost] = useState([])
@@ -29,12 +31,14 @@ function ProfileCompany({ company }) {
     const [open, setOpen] = useState(false);
     const [Image, setImage] = useState("");
     const navigate = useNavigate()
+    const [follow, setFollow] = useState(false)
+
 
     const handleOpen = () => {
         setOpen(!open);
     };
-    
-    const handleEditModal=()=>{
+
+    const handleEditModal = () => {
         setShowEditModal(false)
         setImage('')
     }
@@ -43,8 +47,8 @@ function ProfileCompany({ company }) {
         post.filter((obj) => {
             if (obj._id == id) {
                 setModalData({
-                    id: obj._id, name: obj.companyName, description: obj.description, image: obj.image, comments: obj.comments, likes: obj.likes, date: obj.date,profilePicture:obj.companyId.profilePicture
-                    
+                    id: obj._id, name: obj.companyName, description: obj.description, image: obj.image, comments: obj.comments, likes: obj.likes, date: obj.date, profilePicture: obj.companyId.profilePicture
+
                 })
                 setShowSecondModal(true)
                 console.log(modalData, '///////////////modaldata');
@@ -56,15 +60,15 @@ function ProfileCompany({ company }) {
 
     useEffect(() => {
         axios.get(`/company/profile/${companyId}`).then((res) => {
-            console.log(res.data, 'gggggggggggggg');
+            // console.log(res.data, 'gggggggggggggg');
             setDetails(res.data)
         })
 
         axios.get(`/company/profile-post/${companyId}`).then((post) => {
-            console.log(post);
+            // console.log(post);
             setPost(post.data)
         })
-    }, [approve,showEditModal])
+    }, [approve, showEditModal, follow, companyId])
 
 
     const handleProfile = (e) => {
@@ -122,7 +126,7 @@ function ProfileCompany({ company }) {
                     label: 'Yes',
                     onClick: () => {
                         axios.delete(`/company/delete-post/${id}`).then((res) => {
-                            console.log(res.data);
+                            // console.log(res.data);
                             if (res.data.deleted == true) {
                                 Swal.fire({
                                     position: 'top-end',
@@ -133,20 +137,33 @@ function ProfileCompany({ company }) {
                                 })
                                 setShowSecondModal(false)
                                 setApprove(!approve)
-                
+
                             }
                         })
-                       
+
                     }
                 },
                 {
                     label: 'No',
-                    onClick:()=>{setOpen(false)}
+                    onClick: () => { setOpen(false) }
                 }
             ]
         });
 
-        
+
+    }
+    /* ----------------------------- follow company ----------------------------- */
+
+    const handleFollow = (e) => {
+        e.preventDefault()
+        // console.log(userId);
+        // console.log(companyId);
+        const id = companyId
+        axios.put(`/follow/${userId}`, { id }).then((res) => {
+            console.log(res);
+            setFollow(!follow)
+
+        })
     }
 
 
@@ -165,7 +182,7 @@ function ProfileCompany({ company }) {
                                     <div className='flex '>
                                         <div className="w-full px-4 py-3 flex  justify-start">
                                             <div className="relative">
-                                                <img src={ '/images/' + details?.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
+                                                <img src={'/images/' + details?.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
                                                 {/* <img alt="..." src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg" className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"/> */}
                                             </div >
                                             <div className='ml-5 pt-2 '>
@@ -187,7 +204,10 @@ function ProfileCompany({ company }) {
                                             </div>
 
                                         </div>
-                                        {company ?
+                                        {userId ?
+                                            <button className='ml-4 w-24 h-10 mr-3 mt-5 bg-slate-900 text-white px-2 py-0.5 rounded-2xl' onClick={handleFollow} > {!details?.followers?.includes(userId) ? ' follow ' : 'unfollow'}</button>
+                                            : ''}
+                                        {company === companyId ?
                                             <div>
                                                 <button className='m-5 bg-slate-400 rounded-md px-2' onClick={() => setShowEditModal(true)}>Edit</button>
                                             </div>
@@ -208,25 +228,26 @@ function ProfileCompany({ company }) {
                                         <div className="flex justify-center py-4 lg:pt-4 pt-8">
 
                                             <div className="mr-4 p-3 text-center">
-                                                {/* <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                                    10
-                                                </span> */}
-                                                <span className="text-sm font-semibold text-blueGray-400 underline">All Posts</span>
+                                                
+                                                <span className="text-lg font-semibold text-blueGray-400 underline">All Posts</span>
                                             </div>
-                                            {/* <div className="lg:mr-4 p-3 text-center">
-                                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                                    89
-                                                </span>
-                                                <span className="text-sm text-blueGray-400">Comments</span>
-                                            </div> */}
+                                           
                                         </div>
                                     </div>
                                     <div className=' pb-12 w-full flex justify-center  '>
+
+                                            {post?.length === 0 ?
+                                                <div className='mt-14'>
+                                                    <img className='w-40 ml-3' src={nopost} alt="" />
+                                                    <h1 className='pl-10 pt-3 text-lg font-semibold'>No Post Yet</h1>
+                                                </div>
+                                                : ""}
                                         <div className='grid grid-cols-3  gap-2 '>
+
                                             {
                                                 post.map((obj, index) => {
                                                     return (
-                                                        <img className='w-80 h-24 md:h-52' src={ '/images/' + obj.image} onClick={(e) => { showPost(obj._id) }} />
+                                                        <img className='w-80 h-24 md:h-52' src={'/images/' + obj.image} onClick={(e) => { showPost(obj._id) }} />
 
                                                     )
                                                 })
@@ -264,7 +285,7 @@ function ProfileCompany({ company }) {
                                                                                                 <p className='text-xs text-gray-400'>{format(modalData.date)}</p>
                                                                                             </div>
                                                                                         </div>
-                                                                                        {company ?
+                                                                                        {company === companyId ?
                                                                                             <div className='pt-5 '>
                                                                                                 <div className='flex justify-end cursor-pointer'>
                                                                                                     <FaEllipsisV onClick={handleOpen} />
@@ -276,13 +297,13 @@ function ProfileCompany({ company }) {
                                                                                                     : null}
                                                                                             </div>
 
-                                                                                            
+
                                                                                             : ""}
                                                                                     </div>
                                                                                     <p className='pt-4'>{modalData.description}</p>
                                                                                 </div>
                                                                                 <div className='relative w-full   bg-white '>
-                                                                                    <img className='object w-[800px] h-[300px]' src={ '/images/' + modalData.image} alt="" />
+                                                                                    <img className='object w-[800px] h-[300px]' src={'/images/' + modalData.image} alt="" />
                                                                                 </div>
 
                                                                                 <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>
@@ -412,7 +433,7 @@ function ProfileCompany({ company }) {
                                                             </h3>
                                                             <button
                                                                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                                                onClick={ handleEditModal}
+                                                                onClick={handleEditModal}
                                                             >
                                                                 <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
                                                                     ×
@@ -447,7 +468,7 @@ function ProfileCompany({ company }) {
                                                                 id="file"
                                                                 onChange={fileUpload}
                                                             />
-                                                             <label className="p-2 font-semibold text-blue-400" htmlFor=""> Contact-No:</label>
+                                                            <label className="p-2 font-semibold text-blue-400" htmlFor=""> Contact-No:</label>
                                                             <input
                                                                 type="number"
                                                                 name="phone"
@@ -456,7 +477,7 @@ function ProfileCompany({ company }) {
                                                                 onChange={handleProfile}
                                                             />
                                                             <br /> <br />
-                                                           
+
                                                             <label className="p-2 font-semibold text-blue-400" htmlFor="" > Company Type:</label>
                                                             <input
                                                                 type="text"
@@ -480,7 +501,7 @@ function ProfileCompany({ company }) {
                                                             <button
                                                                 className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                                                                 type="button"
-                                                                onClick={ handleEditModal}
+                                                                onClick={handleEditModal}
                                                             >
                                                                 Close
                                                             </button>
