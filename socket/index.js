@@ -1,4 +1,4 @@
-
+require("dotenv").config();
 const io = require('socket.io')(8800,{
     cors:{
         origin:process.env.FRONT_END
