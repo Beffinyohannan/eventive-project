@@ -30,7 +30,7 @@ function Chat() {
 
 
     useEffect(() => {
-        socket.current = io('http://localhost:8800')
+        socket.current = io(process.env.REACT_APP_SOCKET)
         socket.current.emit("new-user-add", userDetails._id)
         socket.current.on('get-users', (users) => {
             console.log(users);

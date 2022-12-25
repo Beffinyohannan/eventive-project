@@ -30,7 +30,7 @@ const EnquireSchema= mongoose.Schema({
         ref:User
     },
     companyId:{
-        type:Array,
+        type:String,
         ref:company
     },
     status:{

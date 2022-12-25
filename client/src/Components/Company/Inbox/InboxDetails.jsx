@@ -6,10 +6,12 @@ import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import axios from '../../../api/axios';
 import { approveEnq, rejectEnq } from '../../../api/CompanyRequest';
-import SecondModal from './SecondModal';
+// import SecondModal from './SecondModal';
 import { CompanyContext } from '../../../Store/CompanyContext';
 import { approveQuotation, rejectQuotation } from '../../../api/UserRequest';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import companyInstance from '../../../axios/companyAuth'
+import { newUSerChat } from '../../../api/ChatRequest'
 
 function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
     console.log(user);
@@ -21,7 +23,12 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
 
     const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
     const companyId = companyDetails?._id
-    const [enquiryId,setEnquiryId] =useState('')
+    const [enquiryID,setEnquiryID] =useState('')
+    // const [enquiryUserId,setEnquiryUserId]=useState('')
+    const [error, setError] = useState({});
+    const navigate = useNavigate()
+    const [userId, setUserId] = useState({})
+
 
 
 
@@ -30,7 +37,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         if (user) {
             setModalData({
                 companyName: data.companyId.companyName, date:data.date, foodAmount: data.foodAmount, guestAmount: data.guestAmount, lightAmount: data.lightAmount,
-                programmeAmount: data.programmeAmount, cameraAmount: data.cameraAmount, anchorAmount: data.anchorAmount, note: data.note, username: data.username,status: data.status
+                programmeAmount: data.programmeAmount, cameraAmount: data.cameraAmount, anchorAmount: data.anchorAmount, note: data.note, username: data.enquiryId.name,status: data.status,address:data.enquiryId.address
             })
         } else {
 
@@ -124,7 +131,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                     onClick: async () => {
                         if (user) {
                             const { data } = await rejectQuotation(id)
-                            if (data.update == true) {
+                            if (data.update) {
                                 console.log(data.data, 'rejjjjjjjjjjjjjj');
                                 setApprove(!approve)
                                 Swal.fire({
@@ -138,14 +145,15 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                 console.log('rejected not completed ');
                                 Swal.fire({
                                     position: 'top-end',
-                                    icon: 'success',
+                                    // icon: 'success',
                                     title: 'Something Went Wrong',
                                     showConfirmButton: false,
                                     timer: 1500
                                 })
                             }
                         }else{
-                            const { data } = await rejectEnq(id) 
+                            const  {data}  = await rejectEnq(id) 
+                            console.log(data,'+5555');
                             if (data.update == true) {
                                 console.log(data.data, 'rejjjjjjjjjjjjjj');
                                 setApprove(!approve)
@@ -160,7 +168,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                 console.log('rejected not completed ');
                                 Swal.fire({
                                     position: 'top-end',
-                                    icon: 'success',
+                                    // icon: 'success',
                                     title: 'Something Went Wrong',
                                     showConfirmButton: false,
                                     timer: 1500
@@ -178,19 +186,23 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         });
     }
 
-    const [userId, setUserId] = useState('')
-    const replayEnquiry = (id) => {
+    
+    const replayEnquiry = (id,idUser) => {
         console.log('12345678');
-        // <SecondModal user={id}/>
-        setEnquiryId(id)
-        console.log(enquiryId,'333333333');
+        // console.log(idUser,'11111111111111111111111111111111');
+        setEnquiryID(id)
+        setUserId({id:idUser._id,username:idUser.username})
+        // console.log(enquiryId,'333333333');
+        // console.log(userId,'44444444444');
         setShowSecondModal(true)
-        setUserId(id)
+        // setUserId(id)
 
 
     }
 
-    const initialValues = { foodAmount: "", venueAmount: "", programmeAmount: "", lightAmount: "", guestAmount: "", cameraAmount: "", anchorAmount: "", note: "", username: "" }
+    const initialValues = { foodAmount: "", venueAmount: "", programmeAmount: "", lightAmount: "", guestAmount: "", cameraAmount: "", anchorAmount: "", note: "" }
+    // console.log(userId);
+    // console.log(initialValues,'pppppppppppp');
     const [formValues, setFormValues] = useState(initialValues)
 
     const handleChange = (e) => {
@@ -201,29 +213,112 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
 
     }
 
+    const formData = {
+        ...formValues
+    }
+
     const handleSubmit = (id) => {
         // e.preventDefault()
+        const errors = validateForm(formData)
+        setError(errors)
+        console.log(Object.keys(errors).length, 'llkklk');
+        if (Object.keys(errors).length == 0) {
+            companyInstance.post(`/company/eventQuotation?userId=${userId.id}&companyId=${companyId}&enquiryId=${enquiryID}`, { ...formValues }).then((res) => {
+                console.log(res);
+                if (res.data.form == 'sended') {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'form submitted sucessfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setFormValues('')
+                    setShowSecondModal(false)
+                    setApprove(!approve)
+                }
+            })
+        }
 
-        axios.post(`/company/eventQuotation?userId=${userId}&companyId=${companyId}&enquiryId=${enquiryId}`, { ...formValues }).then((res) => {
-            console.log(res);
-            if (res.data.form == 'sended') {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'form submitted sucessfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                setFormValues('')
-                setShowSecondModal(false)
+    }
 
-                // console.log(formValues);
-            }
-        })
+    /* ------------------------------- validation ------------------------------- */
+
+    const validateForm = (data) => {
+        const error = {};
+
+        if (!data.foodAmount) {
+            error.foodAmount = "amount required"
+        }
+
+        if (!data.venueAmount) {
+            error.venueAmount = "amount required"
+        } 
+
+        if (!data.guestAmount) {
+            error.guestAmount= "amount required"
+        }
+        if (!data.programmeAmount) {
+            error.programmeAmount = "amount required"
+        }
+        if (!data.lightAmount) {
+            error.lightAmount = "amount required"
+        }
+        if (!data.cameraAmount) {
+            error.cameraAmount = "amount required"
+        }
+        if (!data.anchorAmount) {
+            error.anchorAmount = "amount required"
+        }
+        if (!data.note) {
+            error.note = "note required"
+        }
+       
+
+        return error;
+    }
+
+    const handleClose =()=>{
+        setShowSecondModal(false)
+        setError('')
+        setFormValues('')
+    }
+
+    const handleMessage =async(rid)=>{
+        let users ={
+            senderId:user,
+            receiverId:rid
+        }
+        console.log(users);
+        try {
+          const {data} = await newUSerChat(users)
+          console.log(data,'chat ress');
+          navigate('/chat')
+        } catch (error) {
+          console.log(error);
+        //   handleError(error)
+        }
+    }
+
+    const handleMessageCompany = async(rid)=>{
+        let company ={
+            senderId:companyId,
+            receiverId:rid
+        }
+        console.log(company,'777777777');
+        try {
+            const {data} = await newUSerChat(company)
+            console.log(data,'chat ress');
+            navigate('/company/chat')
+          } catch (error) {
+            console.log(error);
+          //   handleError(error)
+          }
     }
 
     return (
         <>
+       
         <div className=' flex justify-between  p-1 px-4 mb-3 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
             <div className='ml-2 w-52'>
                 <h1 className='text-xl text-black font-medium pb-1 pt-1 cursor-pointer'>{user ? data.companyId.companyName : data.name}</h1>
@@ -240,16 +335,17 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                     : ''}
                 {approved ?
                     (user?
-                        <Link to={'/chat'} className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' >Message</Link>
+                        <Link  className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' onClick={(e)=>handleMessage(data.companyId._id)} >Message</Link>
                         : 
                         (data.status =='replayed'? 
-                        <Link to={'/company/chat'} className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' >Message</Link> :
-                        <button className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' onClick={(e) => { replayEnquiry(data._id) }}>Replay</button> )
+                        <Link  className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' onClick={(e)=>handleMessageCompany(data.userId._id)} >Message</Link> :
+                        <button className='ml-2 my-3 bg-slate-900 text-white px-3 py-0.5 rounded-xl' onClick={(e) => { replayEnquiry(data._id,data.userId) }}>Replay</button> )
                         )
                     : ""
                     }
             </div>
         </div>
+        
         {user ?
                 <div>
                     {showModal ? (
@@ -291,6 +387,10 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                     <tr className='pt-2'>
                                                         <th className='text-right pr-2 '>User Name : </th>
                                                         <td width="200px">{modalData.username}</td>
+                                                    </tr>
+                                                    <tr className='pt-2'>
+                                                        <th className='text-right pr-2 '>User Address : </th>
+                                                        <td width="200px">{modalData.address}</td>
                                                     </tr>
                                                     <tr className='pt-2'>
                                                         <th className='text-right pr-2 '>Food Arrangements : </th>
@@ -454,7 +554,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                         </div>
                                                         <div>
                                                             <label for="name" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">Amount</label>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='foodAmount' value={formValues.foodAmount} onChange={handleChange} />
+                                                            <input id="name"  type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='foodAmount' value={formValues.foodAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.foodAmount}</p>
                                                         </div>
 
                                                     </div>
@@ -463,7 +564,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>venue Decoration</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='venueAmount' value={formValues.venueAmount} onChange={handleChange} />
+                                                            <input id="name" type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='venueAmount' value={formValues.venueAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.venueAmount}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-3 justify-between'>
@@ -471,7 +573,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>Guest Management</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='guestAmount' value={formValues.guestAmount} onChange={handleChange} />
+                                                            <input id="name" type='number' className="mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='guestAmount' value={formValues.guestAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.guestAmount}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-3 justify-between'>
@@ -479,7 +582,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>Programme Management</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='programmeAmount' value={formValues.programmeAmount} onChange={handleChange} />
+                                                            <input id="name" type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='programmeAmount' value={formValues.programmeAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.programmeAmount}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-3 justify-between'>
@@ -487,7 +591,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>Light Arrangements</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='lightAmount' value={formValues.lightAmount} onChange={handleChange} />
+                                                            <input id="name" type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='lightAmount' value={formValues.lightAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.lightAmount}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-3 justify-between'>
@@ -495,7 +600,8 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>Photography</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='cameraAmount' value={formValues.cameraAmount} onChange={handleChange} />
+                                                            <input id="name" type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='cameraAmount' value={formValues.cameraAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.cameraAmount}</p>
                                                         </div>
                                                     </div>
                                                     <div className='flex gap-3 justify-between'>
@@ -503,8 +609,9 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                                             <p className='pt-5  text-black'>Anchoring</p>
                                                         </div>
                                                         <div>
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='anchorAmount' value={formValues.anchorAmount} onChange={handleChange} />
-                                                            <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 items-center pl-3 text-sm border-gray-300 rounded border-b hidden" name='username' value={formValues.username} onChange={handleChange} />
+                                                            <input id="name" type='number' className=" mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border-b" placeholder="₹" name='anchorAmount' value={formValues.anchorAmount} onChange={handleChange} />
+                                                            <p className='text-red-500'>{error.anchorAmount}</p>
+                                                            {/* <input id="name" className="mb-5 mt-2 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 items-center pl-3 text-sm border-gray-300 rounded border-b hidden" name='username' value={formValues.username} onChange={handleChange} /> */}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -512,15 +619,15 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
 
                                                 <label for="Note" className="text-gray-800 text-sm font-bold leading-tight tracking-normal">Note</label>
                                                 <div className="relative mb-5 mt-2">
-
-                                                    <input id="Note" type='text' className="mb-8 text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="" name='note' value={formValues.note} onChange={handleChange} />
+                                                    <input id="Note" type='text' className=" text-gray-600 focus:outline-none focus:border focus:border-indigo-700 font-normal w-full h-10 flex items-center pl-3 text-sm border-gray-300 rounded border" placeholder="" name='note' value={formValues.note} onChange={handleChange} />
+                                                    <p className='text-red-500'>{error.note}</p>
                                                 </div>
                                                 <div className="flex items-center justify-start w-full">
                                                     <p className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 bg-indigo-700 rounded text-white px-8 py-2 text-sm cursor-pointer" onClick={(e)=>handleSubmit()}>Submit</p>
                                                     {/* <button className="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button> */}
                                                 </div>
                                             </form>
-                                            <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={() => setShowSecondModal(false)} >
+                                            <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={handleClose} >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" />
                                                     <line x1="18" y1="6" x2="6" y2="18" />

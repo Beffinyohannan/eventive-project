@@ -113,7 +113,7 @@ function Login() {
               <input className='border p-2 mb-2 w-full' placeholder='email' name='email' type="text" value={formValues.email} onChange={handleChange} />
               <p className='text-red-500'>{error.email}</p>
               <label htmlFor="">Password</label>
-              <input className='border p-2 mb-2 w-full' placeholder='Password' name='password' type="text" value={formValues.password} onChange={handleChange} />
+              <input className='border p-2 mb-2 w-full' placeholder='Password' name='password' type="password" value={formValues.password} onChange={handleChange} />
               <p className='text-red-500'>{error.password}</p>
             </div>
             <button className='w-full py-2 my-4 bg-green-600 hover:bg-green-500'>Login</button>

@@ -110,15 +110,15 @@ function CompanyLogin() {
           <h1 className='text-5xl m-5 pt-40  font-bold  text-slate-200'>Eventive</h1>
           <p className='text-slate-100 font-bold'>Have a opertunity to being ourself. </p>
         </div>
-        <div className='p-4  flex flex-col justify-around items-center w-96' >
+        <div className='p-4  flex flex-col justify-around items-center w-[400px]' >
           <form className='w-3/4 mt-4' onSubmit={handleSubmit}>
-            <h2 className='text-4xl font-bold text-center mb-8'>Login</h2>
+            <h2 className='text-4xl font-bold text-center mb-8'>Company Login</h2>
             <div>
             <label htmlFor="">Email</label>
             <input className='border p-2 mb-2 w-full'  placeholder='email' name='email' type="text" value={formValues.email} onChange={handleChange} />
             <p className='text-red-500'>{error.email}</p>
             <label htmlFor="">Password</label>
-              <input className='border p-2 mb-2 w-full' placeholder='Password' name='password' type="text" value={formValues.password} onChange={handleChange} />
+              <input className='border p-2 mb-2 w-full' placeholder='Password' name='password' type="password" value={formValues.password} onChange={handleChange} />
               <p className='text-red-500'>{error.password}</p>
             </div>
             <button className='w-full py-2 my-4 bg-green-600 hover:bg-green-500'>Login</button>

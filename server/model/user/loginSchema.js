@@ -36,13 +36,23 @@ const UserSchema = mongoose.Schema({
     },
     profilePicture:{
         type:String,
-        default:'1671166312226--default-profile-picture1-768x768.webp'
+        default:'https://drive.google.com/uc?export=view&id=1oDQnboZwPoRJ2Wm0Gh84g8RhnxjK-gXJ'
     },
     address:{
         type:String,
         default:'nil'
 
-    }
+    },
+    notification:[
+        {
+            senderId:String,
+            description:String,
+            date:{
+                type:Date,
+                default:Date.now 
+            }
+        }
+    ]
 })
 
 

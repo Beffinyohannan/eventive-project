@@ -5,6 +5,7 @@ import Post from '../Post/Post'
 import nopost from '../../../assets/camera.png'
 import RightbarUser from '../Sidebar/RightbarUser'
 import { Link } from 'react-router-dom'
+import userInstance from '../../../axios/userAuth'
 
 
 function Feed() {
@@ -20,7 +21,7 @@ function Feed() {
 
   useEffect((e) => {
     // console.log('useeffect called');
-    axios.get(`/viewPosts/${userId}`).then((response) => {
+    userInstance.get(`/viewPosts/${userId}`).then((response) => {
       console.log(response.data);
       setPosts(response.data)
       console.log(posts);
@@ -36,7 +37,7 @@ function Feed() {
 
 
   useEffect(() => {
-    axios.get("/view-companies").then((response) => {
+    userInstance.get("/view-companies").then((response) => {
       // console.log(response.data);
       const { data } = response
       if (response.data) {
@@ -52,7 +53,7 @@ function Feed() {
   state.length = 3
 
   const handleFollow = (id) => {
-    axios.put(`/follow/${userId}`, { id }).then((res) => {
+    userInstance.put(`/follow/${userId}`, { id }).then((res) => {
       console.log(res);
       setFollow(!follow)
 
@@ -80,7 +81,7 @@ function Feed() {
                       <div className=' flex justify-between py-2 px-4 mb-3 h-16 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
                         <div className='flex'>
                           <div className='m-1 '>
-                            <img src={'/images/' + obj.profilePicture} className='rounded-full' width={32} alt="" />
+                            <img src={obj.profilePicture} className='rounded-full' width={32} alt="" />
                           </div>
                           <div className='ml-3'>
                             <Link to={`/profile/company/${obj._id}`} className='text-md font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>
@@ -106,7 +107,7 @@ function Feed() {
           return new Date(b.date) - new Date(a.date)
         }).map((obj, i) => (
 
-          <Post key={obj.companyId} setBlock={setBlock} obj={obj} user={userId} />
+          <Post key={obj._id} setBlock={setBlock} obj={obj} user={userId} />
 
         ))
       }

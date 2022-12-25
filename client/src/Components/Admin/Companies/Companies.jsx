@@ -4,6 +4,7 @@ import {confirmAlert} from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Swal from 'sweetalert2'
 import { companyView } from '../../../api/AdminRequest';
+import adminInstance from '../../../axios/adminAuth';
 
 function Companies() {
 
@@ -33,7 +34,7 @@ function Companies() {
               {
                   label: 'Yes',
                   onClick: () => {
-                      axios.post("/admin/block-company/" + id).then((response) => {
+                      adminInstance.post("/admin/block-company/" + id).then((response) => {
                           console.log(response, 'reject');
                           if (response.status === 200) {
                               console.log(response.data, 'rejjjjjjjjjjjjjj');
@@ -86,7 +87,7 @@ function Companies() {
               {
                   label: 'Yes',
                   onClick: () => {
-                      axios.post("/admin/unblock-company/" + id).then((response) => {
+                      adminInstance.post("/admin/unblock-company/" + id).then((response) => {
                           console.log(response, 'reject');
                           if (response.status === 200) {
                               console.log(response.data, 'rejjjjjjjjjjjjjj');
@@ -201,11 +202,6 @@ function Companies() {
                                         <tr>
                                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div class="flex items-center">
-                                                    {/* <div class="flex-shrink-0 w-10 h-10">
-                                   <img class="w-full h-full rounded-full"
-                                       src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-                                       alt="" />
-                               </div> */}
                                                     <div class="ml-3">
                                                         <p class="text-gray-900 whitespace-no-wrap">
                                                             {obj._id}

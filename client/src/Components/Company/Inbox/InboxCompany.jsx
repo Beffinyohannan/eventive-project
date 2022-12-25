@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from '../../../api/axios'
+import companyInstance from '../../../axios/companyAuth'
 import { CompanyContext } from '../../../Store/CompanyContext'
 import InboxDetails from './InboxDetails'
 
@@ -27,7 +28,7 @@ function InboxCompany() {
     }
 
     useEffect(() => {
-        axios.get(`/company/inbox/${companyId}`).then((res) => {
+        companyInstance.get(`/company/inbox/${companyId}`).then((res) => {
             console.log(res.data);
             setState(res.data)
         })
@@ -57,7 +58,7 @@ function InboxCompany() {
                                     {
                                         state.filter(obj => obj.status == 'accepted' || obj.status == 'replayed' ).map((obj, index) => {
                                             return (
-                                                <InboxDetails approved={true} data={obj} />
+                                                    <InboxDetails approved={true} approve={approve} setApprove={setApprove} data={obj} />
                                             )
                                         })}
                                 </div> :
@@ -65,7 +66,7 @@ function InboxCompany() {
                                     {
                                         state.filter(obj => obj.status == 'rejected').map((obj, index) => {
                                             return (
-                                                <InboxDetails data={obj} />
+                                                <InboxDetails data={obj}  />
                                             )
                                         })}
                                 </div>

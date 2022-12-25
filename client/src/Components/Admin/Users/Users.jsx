@@ -5,6 +5,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 import { userView } from '../../../api/AdminRequest';
+import adminInstance from '../../../axios/adminAuth';
 
 function Users() {
 
@@ -38,7 +39,7 @@ function Users() {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        axios.post("/admin/block-user/" + id).then((response) => {
+                        adminInstance.post("/admin/block-user/" + id).then((response) => {
                             console.log(response, 'reject');
                             if (response.status == 200) {
                                 console.log(response.data, 'rejjjjjjjjjjjjjj');
@@ -91,7 +92,7 @@ function Users() {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        axios.post("/admin/unblock-user/" + id).then((response) => {
+                        adminInstance.post("/admin/unblock-user/" + id).then((response) => {
                             console.log(response, 'reject');
                             if (response.status == 200) {
                                 console.log(response.data, 'rejjjjjjjjjjjjjj');

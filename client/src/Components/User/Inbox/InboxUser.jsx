@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import axios from '../../../api/axios'
+import userInstance from '../../../axios/userAuth'
 import { UserContext } from '../../../Store/UserContext'
 import InboxDetails from '../../Company/Inbox/InboxDetails'
 
@@ -27,7 +28,7 @@ function InboxUser() {
     }
 
     useEffect(() => {
-        axios.get(`/inbox/quotations/${userId}`).then((res) => {
+        userInstance.get(`/inbox/quotations/${userId}`).then((res) => {
             console.log(res.data);
             setState(res.data)
         })

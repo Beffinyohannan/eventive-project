@@ -10,6 +10,8 @@ import logo from '../../../assets/logo.webp'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import Swal from 'sweetalert2'
+import userInstance from '../../../axios/userAuth';
+import { socket } from '../../../Store/Socket';
 
 
 
@@ -33,12 +35,14 @@ function Header() {
     };
 
     useEffect(() => {
-        axios.get(`/profile/${userId}`).then((res) => {
+        
+        userInstance.get(`/profile/${userId}`).then((res) => {
             console.log(res.data, 'gggggggggggggg');
             // setUserDetails(res.data)
             setDetails(res.data)
         })
-    }, [])
+        socket.emit("new-user-add", userId)
+    }, [socket])
 
 
     /* ------------------------------ SEARCH USERS ------------------------------ */
@@ -58,7 +62,7 @@ function Header() {
             console.log(error);
         }
     }
-    const handlebtn =()=>{
+    const handlebtn = () => {
         setShowSearch(!showSearch)
         setSearchUser([])
     }
@@ -86,19 +90,28 @@ function Header() {
                 },
                 {
                     label: 'No',
-                    onClick:()=>{setOpenProfile(!openProfile)}
+                    onClick: () => { setOpenProfile(!openProfile) }
                 }
             ]
         });
 
     })
 
+    /* ------------------------------ notification ------------------------------ */
+
+    const [notifiModal, setNotifiModal] = useState(false)
+    const [notificationData,setNotificationData] = useState('')
+    const handleNotficationBtn = () => {
+        console.log('tyui');
+        setNotifiModal(!notifiModal)
+    }
+
     return (
         <div className='bg-slate-100 fixed inset-x-0 top-0 z-10 border-b-2 border-slate-200' >
 
             <div className='flex items-center justify-between'>
 
-                    <img className='ml-6  w-20' src={logo} alt=""  layout='fixed' />
+                <img className='ml-6  w-20' src={logo} alt="" layout='fixed' />
 
                 <div className='flex items-center cursor-pointer md:px-10 sm:h-14 justify-evenly mr-3'>
                     {showSearch ?
@@ -113,32 +126,32 @@ function Header() {
 
                     {serachUser.length !== 0 ?
                         <div className='absolute mt-32 mr-32 lg:mr-60'>
-                       { serachUser.map((obj) => (
-                            <div>
-                                <Link to={`/profile/company/${obj._id}`}>
-                                    <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
-                                        <img class="object-cover w-10 h-10 rounded-full"
-                                            src={'/images/' + obj.profilePicture} alt="username" />
-                                        <div class="w-full pb-2">
-                                            <div class="flex justify-between">
-                                                <span class="block ml-2 font-semibold text-gray-600">{obj.companyName}</span>
+                            {serachUser.map((obj) => (
+                                <div>
+                                    <Link to={`/profile/company/${obj._id}`}>
+                                        <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
+                                            <img class="object-cover w-10 h-10 rounded-full"
+                                                src={obj.profilePicture} alt="username" />
+                                            <div class="w-full pb-2">
+                                                <div class="flex justify-between">
+                                                    <span class="block ml-2 font-semibold text-gray-600">{obj.companyName}</span>
+                                                </div>
+                                                <span class="block ml-2 text-sm text-gray-400">{obj.companyType}</span>
                                             </div>
-                                            <span class="block ml-2 text-sm text-gray-400">{obj.companyType}</span>
-                                        </div>
-                                    </a></Link>
+                                        </a></Link>
 
-                            </div>
+                                </div>
                             ))}
                         </div>
                         : null}
 
                     <div className='flex pr-5'>
                         <FaSearch size={20} className='h-12 mt-2 ml-3' onClick={handlebtn} />
-                        {/* <TfiBell className='h-15 ml-3' /> */}
+                        <TfiBell size={24} className='h-12 my-2 ml-4 ' onClick={handleNotficationBtn} />
                     </div>
                     <div>
                         <div className='flex items-center space-x-2' onClick={() => setOpenProfile(!openProfile)} >
-                            <img src={'/images/' + details.profilePicture} className='rounded-full w-10 h-10' alt="" />
+                            <img src={details.profilePicture} className='rounded-full w-10 h-10' alt="" />
                             <div>
                                 <Link className='font-medium'>
                                     {details?.username}
@@ -146,12 +159,12 @@ function Header() {
                             </div>
                         </div>
                         {openProfile ?
-                        <div className='absolute mt-2  border shadow-md rounded-xl px-5 py-2  cursor-pointer text-xl font-medium bg-slate-50'>
-                            <ul >
-                                <li className='hover:bg-gray-200 rounded-md px-2 py-2'><Link to={'/profile'}>Profile</Link> </li>
-                                <li className='hover:bg-gray-200 rounded-md px-2 py-2' onClick={logout}>  Logout</li>
-                            </ul>
-                        </div>
+                            <div className='absolute mt-2  border shadow-md rounded-xl px-5 py-2  cursor-pointer text-xl font-medium bg-slate-50'>
+                                <ul >
+                                    <li className='hover:bg-gray-200 rounded-md px-2 py-2'><Link to={'/profile'}>Profile</Link> </li>
+                                    <li className='hover:bg-gray-200 rounded-md px-2 py-2' onClick={logout}>  Logout</li>
+                                </ul>
+                            </div>
                             : null}
                     </div>
 
@@ -159,6 +172,34 @@ function Header() {
 
 
             </div>
+
+            {
+                notifiModal ?
+                  
+                <div class="absolute right-20 max-h-48 z-20 w-60 py-2  overflow-y-scroll no-scrollbar  rounded-md shadow-xl dark:bg-blue-200 top-16 bg-sky-100  ">
+                {/* {notificationData.map((obj) => {
+
+                    return ( */}
+
+                        <div class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                          
+                                <img class="flex-shrink-0 object-cover mx-1 rounded-full w-10 h-10" src='' />
+                                
+
+                            <div class="mx-1 flex ">
+                                <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-900 ">qwertyu</h1>
+                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-900 pl-2">qwertyu</p>
+
+                            </div>
+                        </div>
+
+                    {/* )
+                })
+                } */}
+            </div>
+                    
+                    : ""
+            }
 
         </div>
     )

@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import nopost from '../../../assets/camera.png'
+import userInstance from '../../../axios/userAuth';
+import companyInstance from '../../../axios/companyAuth';
 
 
 function ProfileCompany({ company, userId }) {
@@ -41,6 +43,7 @@ function ProfileCompany({ company, userId }) {
     const handleEditModal = () => {
         setShowEditModal(false)
         setImage('')
+        setImageUpload('')
     }
 
     const showPost = (id) => {
@@ -48,10 +51,9 @@ function ProfileCompany({ company, userId }) {
             if (obj._id == id) {
                 setModalData({
                     id: obj._id, name: obj.companyName, description: obj.description, image: obj.image, comments: obj.comments, likes: obj.likes, date: obj.date, profilePicture: obj.companyId.profilePicture
-
                 })
                 setShowSecondModal(true)
-                console.log(modalData, '///////////////modaldata');
+                console.log(modalData, '/////////////modaldata');
             }
         })
     }
@@ -59,15 +61,29 @@ function ProfileCompany({ company, userId }) {
 
 
     useEffect(() => {
-        axios.get(`/company/profile/${companyId}`).then((res) => {
-            // console.log(res.data, 'gggggggggggggg');
-            setDetails(res.data)
-        })
-
-        axios.get(`/company/profile-post/${companyId}`).then((post) => {
-            // console.log(post);
-            setPost(post.data)
-        })
+       
+       
+        
+        if(company){
+            companyInstance.get(`/company/profile/${companyId}`).then((res) => {
+                // console.log(res.data, 'gggggggggggggg');
+                setDetails(res.data)
+            })
+            companyInstance.get(`/company/profile-post/${companyId}/${company}`).then((post) => {
+                // console.log(post);
+                setPost(post.data)
+            })
+        }else{
+            
+            userInstance.get(`/company/profile/${companyId}`).then((res) => {
+                // console.log(res.data, 'gggggggggggggg');
+                setDetails(res.data)
+            })
+            userInstance.get(`/company/profile-post/${companyId}/${userId}`).then((post) => {
+                // console.log(post);
+                setPost(post.data)
+            })
+        }
     }, [approve, showEditModal, follow, companyId])
 
 
@@ -81,38 +97,73 @@ function ProfileCompany({ company, userId }) {
         console.log(details);
     };
 
+    const [imageUpload,setImageUpload] = useState('')
+
     const fileUpload = (e) => {
         console.log("file upload ann");
         setImage(URL.createObjectURL(e.target.files[0]));
 
-        setDetails({
-            ...details,
-            profilePicture: e.target.files[0],
-        });
+        // setDetails({
+        //     ...details,
+        //     profilePicture: e.target.files[0],
+        // });
+        setImageUpload(e.target.files[0])
     };
 
-    const handleEdit = (e) => {
+    const handleEdit = async(e) => {
         e.preventDefault()
         console.log(details, '77777777777777');
-        const formData = new FormData();
-        for (let key in details) {
-            formData.append(key, details[key]);
-        }
-        // console.log(formData, '||||||||||||||||||||');
 
-        axios.post(`/company/edit-profile/${companyId}`, formData).then((res) => {
-            if (res.data.Update == true) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Profile Updated sucessfully',
-                    showConfirmButton: false,
-                    timer: 1500
+        const data = new FormData();
+        const fileName = imageUpload.name
+        data.append('file', imageUpload)
+        data.append("name", fileName)
+        try {
+            if(imageUpload){
+
+                await axios.post('/company/post/upload', data).then((response) => {
+                    console.log(response, 'qqqqqqqqqqqqqqq');
+                    details.profilePicture = 'https://drive.google.com/uc?export=view&id=' + response.data
                 })
-                setShowEditModal(false)
-                setApprove(!approve)
             }
-        })
+
+          await  companyInstance.post(`/company/edit-profile/${companyId}`, details).then((res) => {
+                if (res.data.Update == true) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Profile Updated sucessfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setShowEditModal(false)
+                    setApprove(!approve)
+                }
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        // const formData = new FormData();
+        // for (let key in details) {
+        //     formData.append(key, details[key]);
+        // }
+        // // console.log(formData, '||||||||||||||||||||');
+
+        // axios.post(`/company/edit-profile/${companyId}`, formData).then((res) => {
+        //     if (res.data.Update == true) {
+        //         Swal.fire({
+        //             position: 'top-end',
+        //             icon: 'success',
+        //             title: 'Profile Updated sucessfully',
+        //             showConfirmButton: false,
+        //             timer: 1500
+        //         })
+        //         setShowEditModal(false)
+        //         setApprove(!approve)
+        //     }
+        // })
     }
 
     const handleDelete = (id) => {
@@ -125,7 +176,7 @@ function ProfileCompany({ company, userId }) {
                 {
                     label: 'Yes',
                     onClick: () => {
-                        axios.delete(`/company/delete-post/${id}`).then((res) => {
+                        companyInstance.delete(`/company/delete-post/${id}`).then((res) => {
                             // console.log(res.data);
                             if (res.data.deleted == true) {
                                 Swal.fire({
@@ -159,7 +210,7 @@ function ProfileCompany({ company, userId }) {
         // console.log(userId);
         // console.log(companyId);
         const id = companyId
-        axios.put(`/follow/${userId}`, { id }).then((res) => {
+        userInstance.put(`/follow/${userId}`, { id }).then((res) => {
             console.log(res);
             setFollow(!follow)
 
@@ -182,7 +233,7 @@ function ProfileCompany({ company, userId }) {
                                     <div className='flex '>
                                         <div className="w-full px-4 py-3 flex  justify-start">
                                             <div className="relative">
-                                                <img src={'/images/' + details?.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
+                                                <img src={details?.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-40 h-32 sm:h-40 align-middle border-none " />
                                                 {/* <img alt="..." src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg" className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"/> */}
                                             </div >
                                             <div className='ml-5 pt-2 '>
@@ -247,7 +298,7 @@ function ProfileCompany({ company, userId }) {
                                             {
                                                 post.map((obj, index) => {
                                                     return (
-                                                        <img className='w-80 h-24 md:h-52' src={'/images/' + obj.image} onClick={(e) => { showPost(obj._id) }} />
+                                                        <img className='w-80 h-24 md:h-52' src={obj.image} onClick={(e) => { showPost(obj._id) }} />
 
                                                     )
                                                 })
@@ -278,7 +329,7 @@ function ProfileCompany({ company, userId }) {
                                                                                     <div className='flex justify-between'>
                                                                                         <div className='flex items-center space-x-2'>
 
-                                                                                            <img src={'/images/' + modalData.profilePicture} className='rounded-full' width={40} height={40} alt="" />
+                                                                                            <img src={modalData.profilePicture} className='rounded-full w-10 h-10'  alt="" />
                                                                                             <div>
                                                                                                 {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                                                                                                 <p className='font-medium'>{modalData.name}</p>
@@ -303,7 +354,7 @@ function ProfileCompany({ company, userId }) {
                                                                                     <p className='pt-4'>{modalData.description}</p>
                                                                                 </div>
                                                                                 <div className='relative w-full   bg-white '>
-                                                                                    <img className='object w-[800px] h-[300px]' src={'/images/' + modalData.image} alt="" />
+                                                                                    <img className='object w-[800px] h-[300px]' src={modalData.image} alt="" />
                                                                                 </div>
 
                                                                                 <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>

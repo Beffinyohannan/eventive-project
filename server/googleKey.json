@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "metal-summer-372716",
+  "private_key_id": "8e225f28f352286a4b2d072d7fbabcb1d050b531",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDDCXA1riLHYlmA\nUcjQqJ8okF/r4Z/Tv/W55THRjOgdgDky8cwbvLig0vuEquqFHiN7GDPbwHlG5BI4\nwvayGqO5UOkk6XDYx35c1IhUnqiENy7gB6/FY32TZZJ4fRuIOGqIA2N0qBzmHGC+\n9/C33ItzHH7yKivx5+Rx/LD+UYG+PFEc2Bx+bVh8euC2StzQJlDquHJc9C808BO+\nQvcCUbMwT6Xsu5rLO7MifZUyO2bpAUXSwKrnyA0hFoe7LKCZxgqty29yNrmyWM01\nTlITcrO7MDzUdUD5Y3rlyNq5PG6jvEgLSZLgpaAqTCBErLQdUM8ZKXo+ionbkAIO\nlytW/TADAgMBAAECggEAAUeKpIwUZeZOe9wWofKlzu4Z0dj22oWwf+noo/ijKy3N\nza9lZCvDIE3SBZTaUEmsiqCKqWgtVcg4PhinnO8RYFHqojL/19+lcX8rt8itz51g\nM/1SD/E4NuNA6F+Vu7lkvF+LCCBh6wH176h+BUWdeErHEGqhHwd+oIPyW0wtKDcZ\ntsQ0aaCiNnmsYuu06fZO65TatDG6nkdcdY8SKlFdHZh3l4YAG8sttFxCp0S4qeE4\nTM6g34vIoI2XJTAuHBeai7Is3YAdjg3Q6ycwbULNgdsqB2DstFVBR06oNmyzg4SJ\nhs0Vd/I6jYtHT6ZigdfzqVNbF+VpbAOjjEShrPvmHQKBgQDvm80sYaGPoq94aCWG\nmpYI3gcoQeI5QJ+PbabupqF34Je8i0yZ7qkVB6J44616jgJfMJfFxiZNzhPMnIcn\nAPO1JAO/47sU2i57MJJKYU0QOjNJxFavI2/KYxHf6NyOiCO4j3wS6k8/I7S/6ffM\nwTUnHDWPVjzm3KidCxSNRJDbhwKBgQDQYRCH1sLHIIzs3SsBxI0pXVb+ij8HWGeO\nGjFxDZUX6A+rzMWa3WwrdUHcEQAI1Y6jE5e2B5gIMZQdX3EGmTR1WAN95vYEnFCH\nzBpRhMGdKDTykdO/vpVfR60ZuoWYcEoQBsYmwTmgvxFb+Tv6EMQJj7hrzKeHsROi\nJSGXyyM+pQKBgFGgK/cwk09RRqGoKRB/3RjMOnf2adDDORgtbK7kSSGDe22ZrtDJ\nwwQNA8ZXGaQkeJ5g+XNAm4/p4kjUEh6xblSJHlXiiLsD0M3asBtypkQe75Xzsuwb\nEFxL/6zdsTVFH5YiG0x+UdzalxrB4873Ctp1+7EG2dxz02UcfzXY49hFAoGAd5O7\n0LfE/lAHjsU8ML+B4gLWMStUD/sDMeCGDsIklJtuor/XhY8ay7V2HbsDsg4a1Coi\nHSsua0VIIbLrQUYZfF0NY+ptsyegbs0JLU5pbK3t9GUKhjXvscWH6APJNjj5x0ib\n3RF06HG8nHLhoBaO6I243uOKH6vWAG4eYOUJTKECgYEA3q5l6RI+X2Wk51+uvyuU\nO3EUPBFrlsmpy6MkyFuOTxKaKLgsa/KLbG4UfB2nHEgGgWAVJAjpaYDgATWAROJU\nZt/dfGl7lhWziywmzpAr1n637z4eHT68iAJqtRVAtfWa8p3LPntT8YWvu2FeawSz\n260KdSh8pq427cBjVfOQK+w=\n-----END PRIVATE KEY-----\n",
+  "client_email": "googledrive@metal-summer-372716.iam.gserviceaccount.com",
+  "client_id": "111847606338137109507",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/googledrive%40metal-summer-372716.iam.gserviceaccount.com"
+}

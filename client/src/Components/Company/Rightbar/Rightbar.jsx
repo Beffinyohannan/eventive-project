@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { findSearchCompany } from '../../../api/CompanyRequest'
 import { findSearch } from '../../../api/UserRequest'
 
 function Rightbar() {
@@ -14,7 +15,7 @@ function Rightbar() {
       setSearchUser([])
     }
     try {
-      const { data } = await findSearch(val)
+      const { data } = await findSearchCompany(val)
       console.log(data, 'jjjjjj');
       setSearchUser(data)
     } catch (error) {
@@ -23,7 +24,7 @@ function Rightbar() {
   }
 
   return (
-    <div className=' mb-4 hidden xl:block fixed right-0 top-0 bg-slate-100 h-full '>
+    <div className=' mb-4 mt-12 hidden xl:block fixed right-0 top-0 bg-slate-100 h-full '>
       <div className='flex justify-center '>
         <div className=' w-80 mt-4 px-3'>
           <h1 className='font-semibold text-lg my-4'>Search Companies</h1>
@@ -40,7 +41,7 @@ function Rightbar() {
                     <Link to={`/company/profile/${obj._id}`}>
                       <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
                         <img class="object-cover w-10 h-10 rounded-full"
-                          src={'/images/' + obj.profilePicture} alt="username" />
+                          src={obj.profilePicture} alt="username" />
                         <div class="w-full pb-2">
                           <div class="flex justify-between">
                             <span class="block ml-2 font-semibold text-gray-600">{obj.companyName}</span>

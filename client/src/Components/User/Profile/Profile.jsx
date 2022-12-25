@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from '../../../api/axios';
 import { UserContext } from '../../../Store/UserContext'
 import Swal from 'sweetalert2';
+import userInstance from '../../../axios/userAuth';
 
 
 function Profile() {
@@ -17,16 +18,17 @@ function Profile() {
 
 
     useEffect(() => {
-        axios.get(`/profile/${userId}`).then((res) => {
+        userInstance.get(`/profile/${userId}`).then((res) => {
             console.log(res.data, 'gggggggggggggg');
             // setUserDetails(res.data)
             setDetails(res.data)
         })
-    }, [approve,showEditModal])
+    }, [approve, showEditModal])
 
     const handleEditModal = () => {
         setShowEditModal(false)
         setImage('')
+        setImageUpload('')
     }
 
     const handleProfile = (e) => {
@@ -39,38 +41,72 @@ function Profile() {
         console.log(details);
     };
 
+    const [imageUpload, setImageUpload] = useState('')
     const fileUpload = (e) => {
         console.log("file upload ann");
         setImage(URL.createObjectURL(e.target.files[0]));
 
-        setDetails({
-            ...details,
-            profilePicture: e.target.files[0],
-        });
+        setImageUpload(e.target.files[0])
+        // setDetails({
+        //     ...details,
+        //     profilePicture: e.target.files[0],
+        // });
     };
 
-    const handleEdit = (e) => {
+    const handleEdit = async (e) => {
         e.preventDefault()
         console.log(details, '77777777777777');
-        const formData = new FormData();
-        for (let key in details) {
-            formData.append(key, details[key]);
-        }
-        console.log(formData, '||||||||||||||||||||');
 
-        axios.post(`/edit-profile/${userId}`, formData).then((res) => {
-            if (res.data.Update == true) {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'Profile Updated sucessfully',
-                    showConfirmButton: false,
-                    timer: 1500
+        try {
+
+            const data = new FormData();
+            const fileName = imageUpload.name
+            data.append('file', imageUpload)
+            data.append("name", fileName)
+
+            if (imageUpload) {
+
+                await axios.post('/company/post/upload', data).then((response) => {
+                    console.log(response, 'qqqqqqqqqqqqqqq');
+                    details.profilePicture = 'https://drive.google.com/uc?export=view&id=' + response.data
                 })
-                setShowEditModal(false)
-                setApprove(!approve)
             }
-        })
+
+            userInstance.post(`/edit-profile/${userId}`, details).then((res) => {
+                if (res.data.Update == true) {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Profile Updated sucessfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setShowEditModal(false)
+                    setApprove(!approve)
+                }
+            })
+        } catch (error) {
+            console.log(error.message);
+        }
+        // const formData = new FormData();
+        // for (let key in details) {
+        //     formData.append(key, details[key]);
+        // }
+        // console.log(formData, '||||||||||||||||||||');
+
+        // axios.post(`/edit-profile/${userId}`, formData).then((res) => {
+        //     if (res.data.Update == true) {
+        //         Swal.fire({
+        //             position: 'top-end',
+        //             icon: 'success',
+        //             title: 'Profile Updated sucessfully',
+        //             showConfirmButton: false,
+        //             timer: 1500
+        //         })
+        //         setShowEditModal(false)
+        //         setApprove(!approve)
+        //     }
+        // })
     }
 
 
@@ -90,7 +126,7 @@ function Profile() {
                                 </div>
                                 <div className="w-full px-4 flex  justify-center">
                                     <div className="relative">
-                                        <img src={'/images/' + details.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-52 h-32 sm:h-52 align-middle border-none " />
+                                        <img src={details.profilePicture} alt="" className="shadow-xl rounded-full  w-32 sm:w-52 h-32 sm:h-52 align-middle border-none " />
                                         {/* <img alt="..." src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg" className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"/> */}
                                     </div>
                                 </div>

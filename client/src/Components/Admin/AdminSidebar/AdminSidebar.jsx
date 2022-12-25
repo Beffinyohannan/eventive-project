@@ -23,11 +23,7 @@ function AdminSidebar() {
 
 
     const logout = (() => {
-        console.log('gfdghsfgdfjgjhkj');
-        // removeCookie("admin-token")
-        // alert('Logout Sucessfully')
-        // window.location.href="/admin-login"
-
+       
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to Logout.',
@@ -36,16 +32,16 @@ function AdminSidebar() {
                     label: 'Yes',
                     onClick: () => {
                         window.localStorage.removeItem('admin-token')
-                        //    navigate("/admin-login")
-                        Swal.fire({
-                            position: 'top-end',
-                            icon: 'success',
-                            title: 'You are successfully logged out',
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(() => {
-                            navigate('/admin/login')
-                        })
+                        // Swal.fire({
+                        //     position: 'top-end',
+                        //     icon: 'success',
+                        //     title: 'You are successfully logged out',
+                        //     showConfirmButton: false,
+                        //     timer: 1500
+                        // }).then(() => {
+                           
+                        // })
+                        navigate('/admin/login')
                     }
                 },
                 {

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { eventDetail, singleEventPost } from '../../../api/CompanyRequest'
+import { eventDetail, singleEventPost, userEventDetail, userSingleEventPost } from '../../../api/CompanyRequest'
 
 import Post from '../Post/Post'
 import EventsView from './EventsView'
@@ -19,9 +19,14 @@ function SingleView({ company }) {
   useEffect(() => {
     const singleEvent = async () => {
       try {
-        const { data } = await singleEventPost(eventId)
-        // console.log(data, '666666666');
-        setSinglePost(data)
+        if(company){
+          const { data } = await singleEventPost(eventId)
+          // console.log(data, '666666666');
+          setSinglePost(data)
+        }else{
+          const { data } = await userSingleEventPost(eventId)
+          setSinglePost(data)
+        }
       } catch (error) {
         console.log(error.message);
       }
@@ -32,9 +37,14 @@ function SingleView({ company }) {
   useEffect(() => {
     const details = async () => {
       try {
-        const { data } = await eventDetail(eventId)
-        console.log(data, 'qwerty');
-        setDetails(data)
+        if(company){
+          const { data } = await eventDetail(eventId)
+          console.log(data, 'qwerty');
+          setDetails(data)
+        }else{
+          const { data } = await userEventDetail(eventId)
+          setDetails(data)
+        }
       } catch (error) {
         console.log(error.message);
       }

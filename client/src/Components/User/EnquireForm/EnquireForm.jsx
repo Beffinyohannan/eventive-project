@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react'
 import axios from '../../../api/axios'
 import { UserContext } from '../../../Store/UserContext'
 import Swal from 'sweetalert2'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import userInstance from '../../../axios/userAuth'
+import Inbox from './Inbox'
 
 
 function EnquireForm() {
@@ -15,7 +17,15 @@ function EnquireForm() {
     const [showModal, setShowModal] = useState(false);
     const [com, setCom] = useState([])
     const navigate = useNavigate()
+    const [error, setError] = useState({});
+    const [sendError, setSendError] = useState('')
+    const [enquire, setEnquire] = useState(true)
 
+
+
+    const formData = {
+        ...formValues
+    }
 
 
     const handleChange = (e) => {
@@ -27,45 +37,55 @@ function EnquireForm() {
     }
     const fullDetails = (e) => {
         e.preventDefault()
-        axios.get('/view-companies').then((res) => {
-            console.log(res.data);
-            setState(res.data)
-        })
-        setShowModal(true)
+        const errors = validateForm(formData)
+        setError(errors)
+        console.log('mmmmmmmmmmmmmmmmmmmmmmmmm');
+        console.log(Object.keys(errors).length, 'llkklk');
+        if (Object.keys(errors).length == 0) {
+
+            userInstance.get('/view-companies').then((res) => {
+                console.log(res.data);
+                setState(res.data)
+            })
+            setShowModal(true)
+        }
 
     }
     const handleCompany = (id) => {
-        setCom([...com, 
-         id
+        setCom([...com,
+            id
         ])
     }
     console.log(com, '000000000000000');
 
-//   const  companyData=[
-//         ...com
-    
-//   ]
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if (com.length === 0) {
+            setSendError('Select the companies ')
+        } else {
 
-        axios.post(`/eventEnquire?userId=${userId}&companyId=${formValues}`,{com,...formValues}).then((res) => {
-            console.log(res);
-            if (res.data.form == 'sended') {
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'success',
-                    title: 'form submitted sucessfully',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                setCom('')
-                setFormValues('')
-                setShowModal(false)
-                navigate('/inbox')
-                // console.log(formValues);
-            }
-        })
+            userInstance.post(`/eventEnquire?userId=${userId}&companyId=${formValues}`, { com, ...formValues }).then((res) => {
+                console.log(res);
+                if (res.data.form == 'sended') {
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'form submitted sucessfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    setCom('')
+                    setFormValues('')
+                    setShowModal(false)
+                    setEnquire(false)
+                    // navigate('/inbox')
+                    // console.log(formValues);
+                }
+            })
+        }
+
     }
 
     const handleDone = (e) => {
@@ -75,42 +95,124 @@ function EnquireForm() {
         navigate('/inbox')
     }
 
-    const handleClose =()=>{
+    const handleClose = () => {
         setShowModal(false)
         setCom('')
+        setSendError('')
+    }
+
+    /* ------------------------------- validation ------------------------------- */
+
+    const validateForm = (data) => {
+        const error = {};
+        const regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+        if (!data.name) {
+            error.name = "Name required"
+        }
+
+        if (!data.email) {
+            error.email = "Email required"
+        } else if (!regex.test(data.email)) {
+            error.email = "enter valide email address"
+        }
+
+        if (!data.eventDate) {
+            error.eventDate = "Event Date required"
+        }
+        if (!data.eventType) {
+            error.eventType = "Event Type required"
+        }
+        if (!data.phone) {
+            error.phone = "Phone required"
+        }
+        if (!data.guestNumber) {
+            error.guestNumber = "Guest Number required"
+        }
+        if (!data.budget) {
+            error.budget = "Budget required"
+        }
+        if (!data.address) {
+            error.address = "Address required"
+        }
+        if (!data.other) {
+            error.other = "Type other requirements "
+        }
+        if (!data.notes) {
+            error.notes = "Type any Notes"
+        }
+
+
+
+        return error;
+    }
+
+    const handleEnquire = (e) => {
+        e.preventDefault()
+        setEnquire(true)
+    }
+
+    const handleSented=(e)=>{
+        e.preventDefault()
+        setEnquire(false)
     }
 
     return (
         <div className=' flex justify-center md:justify-end'>
 
-            <div className="w-full md:w-10/12 pt-20 overflow-scroll  bg-slate-50 shadow-sm flex items-center justify-center" >
+
+
+            <div className="w-full md:w-10/12 pt-20 overflow-scroll  bg-slate-50 shadow-sm flex flex-col items-center justify-center" >
+                <div className='flex gap-3 py-4'>
+                <h1 className={`font-semibold rounded-2xl px-2 py-1 cursor-pointer ${enquire ? ' bg-slate-500 text-white' : 'text-gray-800'}`} onClick={handleEnquire}>Enquiry</h1>
+                <h1 className={`font-semibold rounded-2xl px-2 py-1 cursor-pointer ${!enquire ? ' bg-slate-500 text-white' : 'text-gray-800'}`} onClick={handleSented}>Sented</h1>
+                </div>
+               {enquire ?
+              
                 <div className="bg-white py-6 px-10 w-4/5 md:w-3/5 mb-3 ">
                     <div className="sm:text-3xl text-2xl font-semibold text-center text-sky-600  mb-12">
                         Enquire Form
                     </div>
                     <form>
                         <div className="">
-                            <div className='flex gap-2'>
-
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='name' placeholder="Name " value={formValues.name} onChange={handleChange} />
-
-                                <input type="email" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='email' placeholder="Eamil Adress " value={formValues.email} onChange={handleChange} />
+                            <div className='grid grid-cols-2 gap-2  pb-5'>
+                                <div>
+                                    <input type="text" className="focus:outline-none border-b w-full border-sky-400 placeholder-gray-500" name='name' placeholder="Name " value={formValues.name} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.name}</p>
+                                </div>
+                                <div>
+                                    <input type="email" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='email' placeholder="Eamil Adress " value={formValues.email} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.email}</p>
+                                </div>
 
                             </div>
-                            <div className='flex gap-2 '>
-                                <input type="date" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='eventDate' placeholder="Date Of Event " value={formValues.eventDate} onChange={handleChange} />
-
-                                <input type="phone" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='phone' placeholder="Phone " value={formValues.phone} onChange={handleChange} />
+                            <div className='grid grid-cols-2 gap-2 pb-5'>
+                                <div>
+                                    <input type="date" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='eventDate' placeholder="Date Of Event " value={formValues.eventDate} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.eventDate}</p>
+                                </div>
+                                <div>
+                                    <input type="phone" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='phone' placeholder="Phone " value={formValues.phone} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.phone}</p>
+                                </div>
                             </div>
-                            <div className="flex gap-2">
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='guestNumber' placeholder="No. Of Guests " value={formValues.guestNumber} onChange={handleChange} />
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='budget' placeholder="Budget " value={formValues.budget} onChange={handleChange} />
+                            <div className="grid grid-cols-2 gap-2 pb-5">
+                                <div>
+                                    <input type="number" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='guestNumber' placeholder="No. Of Guests " value={formValues.guestNumber} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.guestNumber}</p>
+                                </div>
+                                <div>
+                                    <input type="number" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='budget' placeholder="Budget " value={formValues.budget} onChange={handleChange} />
+                                    <p className='text-red-500'>{error.budget}</p>
+                                </div>
                             </div>
-                            <div className="">
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='eventType' placeholder="Type of Event " value={formValues.eventType} onChange={handleChange} />
+                            <div className="pb-5">
+                                <input type="text" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='eventType' placeholder="Type of Event " value={formValues.eventType} onChange={handleChange} />
+                                <p className='text-red-500'>{error.eventType}</p>
                             </div>
-                            <div className="">
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='address' placeholder="Address " value={formValues.address} onChange={handleChange} />
+                            <div className="pb-5">
+                                <input type="text" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='address' placeholder="Address " value={formValues.address} onChange={handleChange} />
+                                <p className='text-red-500'>{error.address}</p>
                             </div>
 
                             <div className="flex ">
@@ -178,14 +280,16 @@ function EnquireForm() {
                             </div>
 
                             <div className="pt-5">
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='other' placeholder="Other Elements" value={formValues.other} onChange={handleChange} />
+                                <input type="text" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='other' placeholder="Other Elements" value={formValues.other} onChange={handleChange} />
+                                <p className='text-red-500'>{error.other}</p>
                             </div>
-                            <div className="">
-                                <input type="text" className="focus:outline-none border-b w-full pb-2 border-sky-400 placeholder-gray-500 mb-8" name='notes' placeholder="Notes" value={formValues.notes} onChange={handleChange} />
+                            <div className="pt-5">
+                                <input type="text" className="focus:outline-none border-b w-full  border-sky-400 placeholder-gray-500 " name='notes' placeholder="Notes" value={formValues.notes} onChange={handleChange} />
+                                <p className='text-red-500'>{error.notes}</p>
                             </div>
 
                             <div className="flex justify-center my-6">
-                                <p className=" rounded-full  p-3 w-full sm:w-56   bg-gradient-to-r from-sky-600  to-teal-300 text-white text-center text-lg font-semibold " onClick={fullDetails}>
+                                <p className=" rounded-full  p-3 w-full sm:w-56   bg-gradient-to-r from-sky-600  to-teal-300 text-white text-center text-lg font-semibold  cursor-pointer" onClick={fullDetails}>
                                     Submit
                                 </p>
                             </div>
@@ -214,7 +318,7 @@ function EnquireForm() {
                                             {/*body*/}
 
                                             <div className='pb-2'>
-
+                                                <p className='text-red-500'>{sendError}</p>
                                                 {state.map((obj) => {
                                                     return (
 
@@ -229,9 +333,9 @@ function EnquireForm() {
                                                                 </div>
 
                                                                 <div className='mt-1'>
-                                                                    {com.includes(obj._id) ? 
-                                                                    <p className='font-semibold p-2'>selected</p>:
-                                                                    <p className='ml-4 my-1  bg-slate-900 text-white px-4 py-0.5 rounded-xl' onClick={(e) => { handleCompany(obj._id) }}  > select</p>
+                                                                    {com.includes(obj._id) ?
+                                                                        <p className='font-semibold p-2'>selected</p> :
+                                                                        <p className='ml-4 my-1  bg-slate-900 text-white px-4 py-0.5 rounded-xl cursor-pointer' onClick={(e) => { handleCompany(obj._id) }}  > select</p>
                                                                     }
                                                                     {/* <input type="checkbox" className="border-sky-400 " name='company' value={obj._id} checked={formValues.company} onChange={handleChange} /> */}
                                                                 </div>
@@ -254,6 +358,8 @@ function EnquireForm() {
                         ) : null}
                     </form>
                 </div>
+                 :
+                 <Inbox/>}
             </div>
         </div>
     )

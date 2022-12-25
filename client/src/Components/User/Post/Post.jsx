@@ -9,22 +9,20 @@ import { FiSend } from 'react-icons/fi'
 import { BsBookmark, BsEmojiSmile, BsThreeDots } from 'react-icons/bs'
 import axios from '../../../api/axios'
 import { format } from 'timeago.js'
-import Moment from 'moment'
 import { UserContext } from '../../../Store/UserContext'
 import { Link } from 'react-router-dom'
 import { reportUserPost } from '../../../api/UserRequest'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import userInstance from '../../../axios/userAuth'
+import companyInstance from '../../../axios/companyAuth'
+import { socket } from '../../../Store/Socket'
 
 function Post({ obj, setBlock, company, user }) {
 
     const [likes, setlikes] = useState(false)
     const [count, setCount] = useState(obj.likes.length)
-    // const PF = process.env.REACT_APP_PUBLIC_FOLDER
-    // console.log(PF, 'asdfghjxcvbnmwertyui');
     const { userDetails } = useContext(UserContext)
-    console.log(user, '00000000000000');
-    
     const userId = user
     const [comment, setComment] = useState('')
     const [viewComment, setViewComment] = useState(false)
@@ -36,6 +34,8 @@ function Post({ obj, setBlock, company, user }) {
 
 
 
+    /* ----------------------------- likes useEffect ---------------------------- */
+
     useEffect(() => {
         console.log('useeffect called');
         setlikes(obj.likes.includes(userId))
@@ -43,28 +43,46 @@ function Post({ obj, setBlock, company, user }) {
         // console.log(likes, 'likessssss');
     }, [])
 
+    /* ------------------------- view comments useEffect ------------------------ */
+
     useEffect(() => {
-        axios.get(`/post/viewComments/${obj._id}`).then((res) => {
-            // console.log(res.data,'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-            const data = res.data[0]
-            //  console.log(data.comments,'222222222222222222222222222222222');
-            setViewAllComment(res.data[0].comments)
-            console.log(viewAllComment,'&&&&&&&&&&');
-        })
+        if(company){
+            companyInstance.get(`/post/viewComments/${obj._id}`).then((res) => {
+                const data = res.data[0]
+                setViewAllComment(res.data[0].comments)
+                console.log(viewAllComment,'&&&&&&&&&&');
+            })
+        }else{
+            userInstance.get(`/post/viewComments/${obj._id}`).then((res) => {
+                const data = res.data[0]
+                setViewAllComment(res.data[0].comments)
+                console.log(viewAllComment,'&&&&&&&&&&');
+            }) 
+        }
     }, [viewCmt])
+
+    /* ------------------------------- post likes ------------------------------- */
 
     const handleLike = (id) => {
         // console.log('hiiiiiiiiiiiiii');
-        axios.put('/post/like/' + id, { userId }).then((res) => {
+        userInstance.put('/post/like/' + id, { userId }).then((res) => {
             if (res.status == '200') {
                 console.log(res);
                 setlikes(!likes)
                 setCount(likes ? count - 1 : count + 1)
                 // console.log(count, 'qwertyuiop');
 
+                socket.emit("send-notification",{
+                    senderId:userId,
+                    receiverId:obj.companyId._id,
+                    type:"liked your post"
+                })
+
             }
         })
     }
+
+    /* --------------------------------- post comment  -------------------------------- */
 
     const handleComment = (e) => {
         e.preventDefault()
@@ -81,7 +99,7 @@ function Post({ obj, setBlock, company, user }) {
         // console.log(error, 'mmmmmmmmmmmmmmmmmmmmmmmmm');
         console.log(Object.keys(errors).length, 'llkklk');
         if (Object.keys(errors).length == 0) {
-            axios.put(`/post/comment/${obj._id}`, datas).then((res) => {
+            userInstance.put(`/post/comment/${obj._id}`, datas).then((res) => {
                 console.log(res);
                 setComment('')
                 setViewCmt(!viewCmt)
@@ -116,8 +134,8 @@ function Post({ obj, setBlock, company, user }) {
     }
 
 
+    /* ------------------------------- BLOCK POST ------------------------------- */
 
-    // BLOCK POST 
     const [reason, setReason] = useState('')
 
 
@@ -158,7 +176,7 @@ function Post({ obj, setBlock, company, user }) {
             <div className='p-5 bg-white   rounded-t-2xl border-slate-200 border-t shadow-md'>
                 <div className='flex justify-between'>
                     <div className='flex items-center space-x-2'>
-                        <img src={'/images/' + obj.companyId.profilePicture} className='rounded-full' width={40} height={40} alt="" />
+                        <img src={obj.companyId.profilePicture} className='rounded-full w-12 h-12'  alt="" />
                         <div>
                             {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                             {company?
@@ -182,7 +200,7 @@ function Post({ obj, setBlock, company, user }) {
                 <p className='pt-4'>{obj.description}</p>
             </div>
             <div className='relative w-full   bg-white '>
-                <img className='object w-[800px] h-[350px]' src={'/images/' + obj.image} alt="" />
+                <img className='object w-[800px] h-[350px]' src={obj.image} alt="" />
             </div>
 
             <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>

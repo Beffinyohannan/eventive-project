@@ -6,3 +6,5 @@ export const getMessages =(id)=>axios.get(`/message/${id}`)
 
 export const addMessage =(data)=>axios.post('/message/',data)
 
+export const newUSerChat =(data)=>axios.post('/chat',data)
+

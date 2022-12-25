@@ -1,3 +1,4 @@
+
 require("dotenv").config();
 const io = require('socket.io')(8800,{
     cors:{
@@ -35,6 +36,15 @@ io.on("connection",(Socket)=>{
         if(user){
             io.to(user.socketId).emit("receive-message",data)
         }
+    })
+
+    /* ------------------------------ notification ------------------------------ */
+    Socket.on("send-notification",(data)=>{
+        const {receiverId,senderId,type} =data
+        console.log(data,'ggggggggg');
+        const user = activeUsers.find((user)=> user.userId ==receiverId)
+        console.log(user,'1111111111111');
+        io.to(receiverId?.socketId).emit("get-notification",data)
     })
 
     Socket.on("disconnect",()=>{

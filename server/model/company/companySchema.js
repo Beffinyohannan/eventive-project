@@ -1,4 +1,5 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const User = require("../user/loginSchema");
 
 const validateEmail = function (email) {
     var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -48,8 +49,21 @@ const companySchema = mongoose.Schema({
     },
     profilePicture:{
         type:String,
-        default:'1671166312226--default-profile-picture1-768x768.webp'
-    }
+        default:'https://drive.google.com/uc?export=view&id=1oDQnboZwPoRJ2Wm0Gh84g8RhnxjK-gXJ'
+    },
+    notification:[
+        {
+            senderId:{
+                type:String,
+                ref:User
+            },
+            description:String,
+            date:{
+                type:Date,
+                default:Date.now 
+            }
+        }
+    ]
 })
 
 

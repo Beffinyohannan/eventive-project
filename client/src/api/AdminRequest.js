@@ -1,9 +1,10 @@
+import adminInstance from "../axios/adminAuth";
 import axios from "./axios";
 
-export const graphPost =()=>axios.get('/admin/postGraphInfo')
+export const graphPost =()=>adminInstance.get('/admin/postGraphInfo')
 
-export const viewPostAdmin =()=>axios.get('/admin/posts')
+export const viewPostAdmin =()=>adminInstance.get('/admin/posts')
 
-export const userView =()=>axios.get('/admin/users')
+export const userView =()=>adminInstance.get('/admin/users')
 
-export const companyView =()=>axios.get('/admin/companies')
+export const companyView =()=>adminInstance.get('/admin/companies')

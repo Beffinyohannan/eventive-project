@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import axios from '../../../api/axios'
 import { findSearch } from '../../../api/UserRequest'
+import userInstance from '../../../axios/userAuth'
 import { UserContext } from '../../../Store/UserContext'
 
 function CompanyList() {
@@ -14,7 +15,8 @@ function CompanyList() {
 
 
     useEffect(() => {
-        axios.get("/view-companies").then((response) => {
+        
+        userInstance.get("/view-companies").then((response) => {
             // console.log(response.data);
             const { data } = response
             if (response.data) {
@@ -28,7 +30,7 @@ function CompanyList() {
     }, [block, follow])
 
     const handleFollow = (id) => {
-        axios.put(`/follow/${userId}`, { id }).then((res) => {
+        userInstance.put(`/follow/${userId}`, { id }).then((res) => {
             console.log(res);
             setFollow(!follow)
 
@@ -72,7 +74,7 @@ function CompanyList() {
                                 <Link to={`/profile/company/${obj._id}`}>
                                     <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
                                         <img class="object-cover w-10 h-10 rounded-full"
-                                            src={'/images/' + obj.profilePicture} alt="username" />
+                                            src={obj.profilePicture} alt="username" />
                                         <div class="w-full pb-2">
                                             <div class="flex justify-between">
                                                 <span class="block ml-2 font-semibold text-gray-600">{obj.companyName}</span>
@@ -93,7 +95,7 @@ function CompanyList() {
                         <div className=' flex justify-between p-1 px-1 mb-3 bg-white  rounded-2xl border-slate-200 border-t shadow-md '>
                             <div className='flex'>
                                 <div className='m-2 py-3 px-1'>
-                                    <img src={'/images/' + obj.profilePicture} className='rounded-full w-16 h-14 sm:h-16' alt="" />
+                                    <img src={obj.profilePicture} className='rounded-full w-16 h-14 sm:h-16' alt="" />
                                 </div>
                                 <div className='ml-2 p-1 '>
                                     <Link to={`/profile/company/${obj._id}`} className='text-md sm:text-xl font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>

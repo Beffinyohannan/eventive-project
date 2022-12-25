@@ -3,7 +3,7 @@ import { HiPhotograph } from "react-icons/hi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from '../../../api/axios';
-import { postEvent, viewEvents } from '../../../api/CompanyRequest';
+import { postEvent, userViewEvents, viewEvents } from '../../../api/CompanyRequest';
 import { CompanyContext } from '../../../Store/CompanyContext';
 import EventsView from './EventsView';
 
@@ -82,10 +82,15 @@ function Event({company}) {
     useEffect(() => {
         const viewEvent = async () => {
             try {
-                const { data } = await viewEvents()
-                console.log(data, "lknjbhgvg");
-                setEventView(data)
-                console.log(eventView);
+                if(company){
+                    const { data } = await viewEvents()
+                    console.log(data, "lknjbhgvg");
+                    setEventView(data)
+                    console.log(eventView);
+                }else{
+                    const { data } = await userViewEvents()
+                    setEventView(data)
+                }
             } catch (error) {
                 console.log(error.message);
             }

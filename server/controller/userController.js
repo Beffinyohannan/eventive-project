@@ -6,7 +6,8 @@ const post = require('../model/company/postSchema');
 const Enquire = require('../model/user/eventEnquire')
 const Quotation = require('../model/company/quotationSchema')
 const nodemailer = require("nodemailer")
-const userVerification = require('../model/user/userVerficationSchema')
+const userVerification = require('../model/user/userVerficationSchema');
+const Notification = require('../model/user/notificationSchema');
 
 
 /* ------------------------------- user signup ------------------------------ */
@@ -219,17 +220,17 @@ const viewCompanies = (req, res) => {
 
 /* ------------------------- view post of companies ------------------------- */
 
-const viewPosts =async (req, res) => {
+const viewPosts = async (req, res) => {
     // console.log(req.params.id);
     try {
         const user = await User.findById(req.params.id)
         // const myPost = await Post.find({userId:req.params.id,status:'active'}).sort({createdAt:-1})
-        const feedPosts = await Promise.all(user.following.map((id)=>{
-        return post.find({companyId:id, 'reports.reportedBy': { $ne: req.params.id }, status: true }).populate('companyId').sort({ date: 1 })
-        })) 
+        const feedPosts = await Promise.all(user.following.map((id) => {
+            return post.find({ companyId: id, 'reports.reportedBy': { $ne: req.params.id }, status: true }).populate('companyId').sort({ date: 1 })
+        }))
         // console.log(feedPosts);
-        if(feedPosts){
-           res.json([].concat(...feedPosts))
+        if (feedPosts) {
+            res.json([].concat(...feedPosts))
         }
     } catch (error) {
         console.log(error.message);
@@ -256,19 +257,23 @@ const likePost = async (req, res) => {
     try {
         const posts = await post.findById(req.params.id)
         // console.log(posts, 'kkkkkk');
+        const details = {
+            senderId: userId,
+            description: 'liked your post'
+        }
 
         if (!posts.likes.includes(userId)) {
-            // if(posts.likes.length == 0){
-            //     await post.updateOne({},{$set:{likes:userId}})
-            //     console.log('qwerty');
-            // }
+
             await post.updateOne({ _id: req.params.id }, { $push: { likes: userId } })
+
+            await company.updateOne({ _id: posts.companyId }, { $push: { notification: details } }, { upsert: true })
 
             console.log('post likes');
             res.status(200).json({ message: 'post Liked' })
 
         } else {
             await post.updateOne({ _id: req.params.id }, { $pull: { likes: userId } })
+            // await Notification.updateOne({userId:posts.companyId},{ $push:{notification:details} })
             console.log('post dislike');
             res.status(200).json({ message: 'post disliked!' })
         }
@@ -366,15 +371,17 @@ const eventEnquire = async (req, res) => {
 
         const companyId = req.body.com
         console.log(companyId, '///////////////');
-
-
         let { name, email, phone, eventDate, guestNumber, budget, eventType, address, food, venue, programme, light, guest, camera, anchor, other, notes } = req.body
         const userId = req.query.userId
-        // const companyId = req.query.companyId
-        const eventEnquire = await new Enquire({
-            name, email, phone, eventDate, guestNumber, budget, eventType, address, food, venue, programme, light, guest, camera, anchor, other, notes, userId, companyId
-        })
-        await eventEnquire.save()
+
+        for (let i = 0; i < companyId.length; i++) {
+            const eventEnquire = await new Enquire({
+                name, email, phone, eventDate, guestNumber, budget, eventType, address, food, venue, programme, light, guest, camera, anchor, other, notes, userId, companyId: companyId[i]
+            })
+            await eventEnquire.save()
+        }
+
+
         console.log('success');
         res.status(200).json({ form: 'sended' })
     } catch (err) {
@@ -387,7 +394,7 @@ const eventEnquire = async (req, res) => {
 
 const inboxView = async (req, res) => {
     try {
-        const msg = await Enquire.find({ userId: req.params.id }).populate('companyId')
+        const msg = await Enquire.find({ userId: req.params.id }).populate('companyId').sort({ date: -1 })
         res.status(200).json(msg)
     } catch (err) {
         console.log(err.message);
@@ -428,7 +435,7 @@ const getUserDetail = async (req, res) => {
 const getQuotation = async (req, res) => {
     try {
         const id = req.params.id
-        const quotation = await Quotation.find({ userId: id }).populate('companyId')
+        const quotation = await Quotation.find({ userId: id }).populate('companyId').populate('enquiryId')
         res.status(200).json(quotation)
     } catch (error) {
         console.log(error.message);
@@ -488,37 +495,54 @@ const reportPost = async (req, res) => {
 
 const userProfileEdit = async (req, res) => {
     try {
-        // console.log(req.params.id);
-        // console.log(req.body);
-        const editUser = await User.findById(req.params.id)
+        console.log(req.params.id);
+        console.log(req.body);
+        // const editUser = await User.findById(req.params.id)
         // console.log(editUser, 'pppppppppppppp');
-        console.log(req.file);
-        
-        if (editUser) {
-            if (req.file) {
-                var file = true
-            } else {
-                var file = false
-            }
-            // console.log(file);
-            const edit = await User.updateOne({ _id: req.params.id },
-                {
-                    $set: {
-                        profilePicture: file ? req.file.filename : editUser.profilePicture,
-                        username: req.body.username,
-                        email: req.body.email,
-                        phone: req.body.phone,
-                        address: req.body.address
 
-                    }
-                })
-                // console.log(edit,'kkkkkkkkkk');
-            if (edit) {
-                res.status(200).json({ Update: true, msg: "Updated Successfully " });
-            } else {
-                res.status(500).json({ Update: false, msg: "Update not done" });
-            }
+        const edit = await User.updateOne({ _id: req.params.id },
+            {
+                $set: {
+                    profilePicture: req.body.profilePicture,
+                    username: req.body.username,
+                    email: req.body.email,
+                    phone: req.body.phone,
+                    address: req.body.address
+
+                }
+            })
+        // console.log(edit,'kkkkkkkkkk');
+        if (edit) {
+            res.status(200).json({ Update: true, msg: "Updated Successfully " });
+        } else {
+            res.status(500).json({ Update: false, msg: "Update not done" });
         }
+
+        // if (editUser) {
+        //     if (req.file) {
+        //         var file = true
+        //     } else {
+        //         var file = false
+        //     }
+        //     // console.log(file);
+        //     const edit = await User.updateOne({ _id: req.params.id },
+        //         {
+        //             $set: {
+        //                 profilePicture: file ? req.file.filename : editUser.profilePicture,
+        //                 username: req.body.username,
+        //                 email: req.body.email,
+        //                 phone: req.body.phone,
+        //                 address: req.body.address
+
+        //             }
+        //         })
+        //     // console.log(edit,'kkkkkkkkkk');
+        //     if (edit) {
+        //         res.status(200).json({ Update: true, msg: "Updated Successfully " });
+        //     } else {
+        //         res.status(500).json({ Update: false, msg: "Update not done" });
+        //     }
+        // }
     } catch (error) {
         res.json(error.message)
     }
@@ -530,16 +554,16 @@ const searchCompany = async (req, res) => {
     console.log(req.params.id, "uuiiid")
     const data = req.params.id
     try {
-       const users = await company.find(
-          { companyName: { $regex: "^" + data, $options: "i" } },
-          { _id:1, email: 1, companyName: 1, profilePicture: 1, companyType: 1 }
-       )
-       res.status(200).json(users)
+        const users = await company.find(
+            { companyName: { $regex: "^" + data, $options: "i" } },
+            { _id: 1, email: 1, companyName: 1, profilePicture: 1, companyType: 1 }
+        )
+        res.status(200).json(users)
     } catch (error) {
-       console.log(error)
-       res.status(500).json(error)
+        console.log(error)
+        res.status(500).json(error)
     }
- }
+}
 
 module.exports = {
     signup,

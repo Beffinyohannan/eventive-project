@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import { format } from 'timeago.js'
 import Moment from 'moment'
 import { viewPostAdmin } from '../../../api/AdminRequest';
+import adminInstance from '../../../axios/adminAuth';
 
 
 function Posts() {
@@ -37,7 +38,7 @@ function Posts() {
         {
           label: 'Yes',
           onClick: () => {
-            axios.post("/admin/block-post/" + id).then((response) => {
+            adminInstance.post("/admin/block-post/" + id).then((response) => {
               console.log(response, 'reject');
               if (response.status == 200) {
                 console.log(response.data, 'rejjjjjjjjjjjjjj');
@@ -90,7 +91,7 @@ function Posts() {
         {
           label: 'Yes',
           onClick: () => {
-            axios.post("/admin/unblock-post/" + id).then((response) => {
+            adminInstance.post("/admin/unblock-post/" + id).then((response) => {
               console.log(response, 'reject');
               if (response.status == 200) {
                 console.log(response.data, 'rejjjjjjjjjjjjjj');

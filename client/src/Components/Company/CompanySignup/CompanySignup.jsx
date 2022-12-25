@@ -186,7 +186,7 @@ function CompanySignup() {
           </div>
           <div className='p-4   flex flex-col justify-around items-center'>
             <form className='w-3/4 mt-4 ' onSubmit={handleSubmit}>
-              <h2 className='text-4xl font-bold text-center mb-8'>Signup</h2>
+              <h2 className='text-4xl font-bold text-center mb-8'>Company Signup</h2>
               <div >
                 <div className='flex gap-2'>
 
