@@ -5,7 +5,7 @@ function EventsView({obj,company}) {
     return (
         
         <div class="max-w-sm rounded h-[500px] overflow-hidden shadow-lg bg-white  ">
-            <img class="w-full h-52" src={'/images/' + obj.image} alt="Sunset in the mountains" />
+            <img class="w-full h-52" src={obj.image} alt="Sunset in the mountains" />
             <div class="px-6 py-4">
                 <div class="font-bold text-xl mb-2">
                     {company?

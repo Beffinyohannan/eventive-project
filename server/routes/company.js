@@ -25,7 +25,7 @@ router.delete('/delete-post/:id',check,deletePost)
 // router.post('/edit-profile/:id',multer.single("profilePicture"),editProfile)
 router.post('/edit-profile/:id',check,editProfile)
 
-router.post('/addEvent',type,addEvent)
+router.post('/addEvent',check,addEvent)
 router.get('/view/event',check,eventView)
 router.get('/event/singlePost/:id',check,singleEventPosts)
 router.get('/event/details/:id',check,eventDetails)

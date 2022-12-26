@@ -4,11 +4,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from '../../../api/axios';
 import { postEvent, userViewEvents, viewEvents } from '../../../api/CompanyRequest';
+import companyInstance from '../../../axios/companyAuth';
 import { CompanyContext } from '../../../Store/CompanyContext';
 import EventsView from './EventsView';
 
 
-function Event({company}) {
+function Event({ company }) {
 
     const [showSecondModal, setShowSecondModal] = useState(false)
     const [showImage, setShowImage] = useState()
@@ -17,7 +18,7 @@ function Event({company}) {
     const [event, setEvent] = useState('')
     const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
     const [eventView, setEventView] = useState([])
-    const [change,setChange] = useState(false)
+    const [change, setChange] = useState(false)
 
 
     const onInuputChange = (e) => {
@@ -34,60 +35,94 @@ function Event({company}) {
     const onFormsubmit = async (e) => {
         e.preventDefault()
 
-        const formData = new FormData()
-        const id = companyDetails._id
-        const name = event
-        const des = description
-        formData.append('image', file)
-        formData.append('companyId', id)
-        formData.append('event', name)
-        formData.append('description', des)
+        const newEvent = {
+            companyId: companyDetails._id,
+            event: event,
+            description: description,
+        }
 
-        // const config = {
-        //     header: {
-        //         'content-type': 'multipart/form-data',
+        const data = new FormData();
+        const fileName = file.name
+        data.append('file', file)
+        data.append("name", fileName)
+        try {
+            await axios.post('/company/post/upload', data).then((response) => {
+                console.log(response, 'qqqqqqqqqqqqqqq');
+                newEvent.image = 'https://drive.google.com/uc?export=view&id=' + response.data
+            })
+
+            await companyInstance.post('/company/addEvent', newEvent).then((response) => {
+                console.log('image added');
+                console.log(response.data);
+                if (response.data.event) {
+                    toast.success('New Event Added', {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                    setShowSecondModal(false)
+                    setEvent('')
+                    setDescription('')
+                    setFile('')
+                    setShowImage('')
+                    setChange(!change)
+                }
+            }).catch((err) => {
+                console.log(err.message);
+            })
+
+        } catch (error) {
+            console.log(error);
+        }
+
+        // const formData = new FormData()
+        // const id = companyDetails._id
+        // const name = event
+        // const des = description
+        // formData.append('image', file)
+        // formData.append('companyId', id)
+        // formData.append('event', name)
+        // formData.append('description', des)
+
+
+        // axios.post('/company/addEvent', formData).then((response) => {
+        //     console.log('image added');
+        //     console.log(response.data);
+        //     if (response.data.event) {
+        //         toast.success('New Event Added', {
+        //             position: "top-right",
+        //             autoClose: 2000,
+        //             hideProgressBar: false,
+        //             closeOnClick: true,
+        //             draggable: true,
+        //             progress: undefined,
+        //             theme: "dark",
+        //         });
+        //         setShowSecondModal(false)
+        //         setEvent('')
+        //         setDescription('')
+        //         setFile('')
+        //         setShowImage('')
+        //         setChange(!change)
         //     }
-        // }
-        // console.log(formData, '@@@@@@@@@');
-        // try {
-        //     const {data} = await postEvent(formData)
-        // } catch (error) {
-        //     console.log(error.message);
-        // }
-        axios.post('/company/addEvent', formData).then((response) => {
-            console.log('image added');
-            console.log(response.data);
-            if (response.data.event) {
-                toast.success('New Event Added', {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                });
-                setShowSecondModal(false)
-                setEvent('')
-                setDescription('')
-                setFile('')
-                setShowImage('')
-                setChange(!change)
-            }
-        }).catch((err) => {
-            console.log(err.message);
-        })
+        // }).catch((err) => {
+        //     console.log(err.message);
+        // })
     }
 
     useEffect(() => {
         const viewEvent = async () => {
             try {
-                if(company){
+                if (company) {
                     const { data } = await viewEvents()
                     console.log(data, "lknjbhgvg");
                     setEventView(data)
                     console.log(eventView);
-                }else{
+                } else {
                     const { data } = await userViewEvents()
                     setEventView(data)
                 }
@@ -101,23 +136,31 @@ function Event({company}) {
         // })
     }, [change])
 
+    const handleClose = () => {
+        setShowSecondModal(false)
+        setEvent('')
+        setDescription('')
+        setFile('')
+        setShowImage('')
+    }
+
 
 
     return (
         <div className=' mt-28 mb-4  lg:w-4/5 flex flex-col'>
-            {company?
-            <div className='flex justify-end'>
-                <button className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={(e) => setShowSecondModal(true)}>Add A New Event</button>
-            </div>
-            :''}
+            {company ?
+                <div className='flex justify-end'>
+                    <button className="mb-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onClick={(e) => setShowSecondModal(true)}>Add A New Event</button>
+                </div>
+                : ''}
             <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-4'>
 
-            {eventView.map((obj, i) => (
-                <div >
+                {eventView.map((obj, i) => (
+                    <div >
 
-                    <EventsView obj={obj} company={company} />
-                </div>
-            ))}
+                        <EventsView obj={obj} company={company} />
+                    </div>
+                ))}
             </div>
             {showSecondModal ? (
                 <>
@@ -135,7 +178,7 @@ function Event({company}) {
                                     <div className='flex'>
                                         <button
                                             className="p-1 pb-4 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                                            onClick={() => setShowSecondModal(false)}
+                                            onClick={handleClose}
                                         >
                                             <span className="bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
                                                 ×

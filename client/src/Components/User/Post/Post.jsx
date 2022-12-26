@@ -38,7 +38,7 @@ function Post({ obj, setBlock, company, user }) {
 
     useEffect(() => {
         console.log('useeffect called');
-        setlikes(obj.likes.includes(userId))
+        setlikes(obj?.likes?.includes(userId))
         // setViewAllComment(obj.comments)
         // console.log(likes, 'likessssss');
     }, [])
@@ -176,7 +176,7 @@ function Post({ obj, setBlock, company, user }) {
             <div className='p-5 bg-white   rounded-t-2xl border-slate-200 border-t shadow-md'>
                 <div className='flex justify-between'>
                     <div className='flex items-center space-x-2'>
-                        <img src={obj.companyId.profilePicture} className='rounded-full w-12 h-12'  alt="" />
+                        <img src={obj?.companyId?.profilePicture} className='rounded-full w-12 h-12'  alt="" />
                         <div>
                             {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                             {company?
@@ -200,7 +200,7 @@ function Post({ obj, setBlock, company, user }) {
                 <p className='pt-4'>{obj.description}</p>
             </div>
             <div className='relative w-full   bg-white '>
-                <img className='object w-[800px] h-[350px]' src={obj.image} alt="" />
+                <img className='object w-[800px] h-[350px]' src={obj?.image} alt="" />
             </div>
 
             <div className='flex justify-between rounded-b-2xl items-center  bg-white  text-gray-400 border-t '>

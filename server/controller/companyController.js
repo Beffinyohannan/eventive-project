@@ -305,16 +305,11 @@ const postView = async (req, res) => {
 }
 
 const addEvent = async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     // console.log('qwertyu');
 
     try {
-        const events = new Events({
-            event: req.body.event,
-            description: req.body.description,
-            companyId: req.body.companyId,
-            image: req.file.filename
-        })
+        const events = new Events(req.body)
 
         events.save()
         res.status(200).json({ event: true })

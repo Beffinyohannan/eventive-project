@@ -47,7 +47,7 @@ function RightbarUser() {
                                 <div className=' flex justify-between py-2 px-4 mb-3 h-16 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
                                     <div className='flex'>
                                         <div className='m-1'>
-                                            <img src={obj.profilePicture} className='rounded-full w-10 ' alt="" />
+                                            <img src={obj.profilePicture} className='rounded-full w-10 h-10 ' alt="" />
                                         </div>
                                         <div className='ml-3'>
                                             <Link to={`/profile/company/${obj._id}`} className='text-md font-medium pb-1 cursor-pointer '>{obj.companyName}</Link>
