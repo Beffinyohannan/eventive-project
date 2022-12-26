@@ -1,6 +1,7 @@
 
 require("dotenv").config();
 const io = require('socket.io')(8800,{
+    path:'/socket/socket.io',
     cors:{
         origin:process.env.FRONT_END
     }
