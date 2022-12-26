@@ -90,13 +90,13 @@ function App() {
 
             {/* <Routes> */}
             <Route element={<AdminLoginProtect />} >
-              <Route path='/admin/login' element={<AdminLoginPage />} />
+              <Route path='/admin-login' element={<AdminLoginPage />} />
             </Route>
             <Route element={<AdminRouteProtect />} >
-              <Route path='/admin/dashboard' element={<DashbaordPage />} />
-              <Route path='/admin/users' element={<Userspage />} />
-              <Route path='/admin/companies' element={<CompaniesPage />} />
-              <Route path='/admin/posts' element={<PostsPage />} />
+              <Route path='/admin-dashboard' element={<DashbaordPage />} />
+              <Route path='/admin-users' element={<Userspage />} />
+              <Route path='/admin-companies' element={<CompaniesPage />} />
+              <Route path='/admin-posts' element={<PostsPage />} />
             </Route>
             <Route path='/*' element={<PageNotFound />} />
           </Routes>
