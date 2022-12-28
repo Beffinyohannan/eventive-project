@@ -77,13 +77,13 @@ function App() {
               <Route path='/company/signup' element={<CompanySignupPage />} />
               <Route path='/company/login' element={<CompanyLoginPage />} />
             </Route>
-            <Route element={<CompanyRouteProtect />} >
-              <Route path='/company/homepage' element={<CompanyHomePage />} />
-              <Route path='/company/inbox' element={<InboxCompanyPage />} />
-              <Route path='/company/profile/:id' element={<ProfileCompanyPage />} />
-              <Route path='/company/chat' element={<ChatCompanyPage />} />
-              <Route path='/company/events' element={<EventsCompanyPage />} />
-              <Route path='/company/SingleEvents/:id' element={<SingleEventCompanyPage />} />
+            <Route path='/company' element={<CompanyRouteProtect />} >
+              <Route path='homepage' element={<CompanyHomePage />} />
+              <Route path='inbox' element={<InboxCompanyPage />} />
+              <Route path='profile/:id' element={<ProfileCompanyPage />} />
+              <Route path='chat' element={<ChatCompanyPage />} />
+              <Route path='events' element={<EventsCompanyPage />} />
+              <Route path='SingleEvents/:id' element={<SingleEventCompanyPage />} />
             </Route>
             {/* </Routes> */}
 
@@ -92,11 +92,11 @@ function App() {
             <Route element={<AdminLoginProtect />} >
               <Route path='/admin-login' element={<AdminLoginPage />} />
             </Route>
-            <Route element={<AdminRouteProtect />} >
-              <Route path='/admin-dashboard' element={<DashbaordPage />} />
-              <Route path='/admin-users' element={<Userspage />} />
-              <Route path='/admin-companies' element={<CompaniesPage />} />
-              <Route path='/admin-posts' element={<PostsPage />} />
+            <Route path='/admin' element={<AdminRouteProtect />} >
+              <Route path='dashboard' element={<DashbaordPage />} />
+              <Route path='users' element={<Userspage />} />
+              <Route path='companies' element={<CompaniesPage />} />
+              <Route path='posts' element={<PostsPage />} />
             </Route>
             <Route path='/*' element={<PageNotFound />} />
           </Routes>

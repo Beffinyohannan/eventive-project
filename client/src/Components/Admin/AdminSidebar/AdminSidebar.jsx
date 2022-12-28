@@ -9,11 +9,11 @@ import Swal from 'sweetalert2'
 function AdminSidebar() {
 
     const Menus = [
-        { name: 'Dashboard', link: '/admin-dashboard', icon: AiOutlineHome },
+        { name: 'Dashboard', link: '/admin/dashboard', icon: AiOutlineHome },
         // {name:'Posts',link:'#',icon:HiOutlineBell},
-        { name: 'Posts', link: '/admin-posts', icon: HiOutlineClipboardList },
-        { name: 'Companies', link: '/admin-companies', icon: HiOutlineGlobeAlt },
-        { name: 'Users', link: '/admin-users', icon: HiOutlineTable },
+        { name: 'Posts', link: '/admin/posts', icon: HiOutlineClipboardList },
+        { name: 'Companies', link: '/admin/companies', icon: HiOutlineGlobeAlt },
+        { name: 'Users', link: '/admin/users', icon: HiOutlineTable },
         // {name:'Settings',link:'#',icon:HiOutlineCog},
     ]
 

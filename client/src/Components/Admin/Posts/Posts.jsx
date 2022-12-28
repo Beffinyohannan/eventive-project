@@ -222,7 +222,7 @@ function Posts() {
 
                               <div class="flex-shrink-0 w-10 h-10">
                                 <img class="w-full h-full rounded-full"
-                                  src={'/images/' + obj.image}
+                                  src={obj.image}
                                   alt="" />
                               </div>
                               <div class="ml-3">
