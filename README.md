@@ -79,10 +79,10 @@ Start the server
 bash
   npm run start
 
+## Screenshots
 
 
-
-![landingPage](screenshot/Screenshot_20221229_031925.png)
+![landingPage](https://github.com/Beffinyohannan/eventive-project/blob/422e326cca46790d60c8bd9baaeb6703113a7844/screenshot/Screenshot_20221229_031925.png)
 
 ![signup](screenshot/Screenshot_20221229_032008.png)
 
