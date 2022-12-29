@@ -22,6 +22,8 @@ http
 http
   GET /eventive.tk/login
 
+  GET /eventive.tk/company-login
+
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -31,7 +33,7 @@ http
 #### Get feed
 
 http
-  GET /eventive.tk/feed
+  GET /eventive.tk/posts
 
 
 | Parameter | Type     | Description                |
