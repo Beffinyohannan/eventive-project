@@ -3,9 +3,10 @@ import { userChats } from '../../api/ChatRequest'
 import { UserContext } from '../../Store/UserContext'
 import ChatBox from './ChatBox'
 import Conversation from './Conversation'
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 import { CompanyContext } from '../../Store/CompanyContext'
 import { data } from 'autoprefixer'
+import { socket } from '../../Store/Socket'
 
 function Chat() {
 
@@ -14,7 +15,7 @@ function Chat() {
     const [onlineUsers, setOnlineUsers] = useState([])
     const [sendMessage, setSendMessage] = useState(null)
     const [receiveMessage, setReceiveMessage] = useState(null)
-    const socket = useRef()
+    // const socket = useRef()
     const { userDetails, setUserDetails } = useContext(UserContext)
     // const { companyDetails,setCompanyDetails } = useContext(CompanyContext)
     // console.log(companyDetails,'444444444444444');
@@ -23,16 +24,16 @@ function Chat() {
 
     useEffect(() => {
         if (sendMessage !== null) {
-            socket.current.emit('send-message', sendMessage)
+            socket.emit('send-message', sendMessage)
         }
     }, [sendMessage])
 
 
 
     useEffect(() => {
-        socket.current = io(process.env.REACT_APP_SOCKET,{path: '/socket/socket.io'})
-        socket.current.emit("new-user-add", userDetails._id)
-        socket.current.on('get-users', (users) => {
+        // socket.current = io(process.env.REACT_APP_SOCKET,{path: '/socket/socket.io'})
+        socket.emit("new-user-add", userDetails._id)
+        socket.on('get-users', (users) => {
             console.log(users);
             setOnlineUsers(users)
             console.log(onlineUsers);
@@ -42,7 +43,7 @@ function Chat() {
     /* ------------------- receive message from socket server ------------------- */
 
     useEffect(() => {
-        socket.current.on("receive-message", (data) => {
+        socket.on("receive-message", (data) => {
             console.log(data);
             setReceiveMessage(data)
             console.log(receiveMessage);

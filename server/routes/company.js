@@ -1,4 +1,4 @@
-const { companySignup, companyLogin, uploadPost, inboxView, acceptForm, rejectFrom, getCompanyProfile, getProfilePost, quotation, getCompany, deletePost, editProfile, postView, addEvent, eventView, singleEventPosts, eventDetails, postUpload, newPostUpload } = require('../controller/companyController')
+const { companySignup, companyLogin, uploadPost, inboxView, acceptForm, rejectFrom, getCompanyProfile, getProfilePost, quotation, getCompany, deletePost, editProfile, postView, addEvent, eventView, singleEventPosts, eventDetails, postUpload, newPostUpload, changeNotificationStatus, notificationCount } = require('../controller/companyController')
 const multer = require('../helper/multer');
 const upload= require('../helper/multer')
 const check = require('../middleware/authToken');
@@ -29,6 +29,8 @@ router.post('/addEvent',check,addEvent)
 router.get('/view/event',check,eventView)
 router.get('/event/singlePost/:id',check,singleEventPosts)
 router.get('/event/details/:id',check,eventDetails)
+router.get('/notification-status/:id',check,changeNotificationStatus)
+router.get('/notification-count/:id',check,notificationCount)
 
 
 module.exports= router 

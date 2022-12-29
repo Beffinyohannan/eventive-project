@@ -8,10 +8,9 @@ import { findSearch } from '../../../api/UserRequest';
 import { CompanyContext } from '../../../Store/CompanyContext';
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { findSearchCompany, getUser } from '../../../api/CompanyRequest';
+import { findSearchCompany, getUser, notificationCount, notificationStatus } from '../../../api/CompanyRequest';
 import { useEffect } from 'react';
-import { socket } from '../../../Store/Socket';
-
+import {socket} from '../../../Store/Socket'
 function HeaderCompany() {
     const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
     const companyId = companyDetails?._id
@@ -21,33 +20,49 @@ function HeaderCompany() {
     const [details, setDetails] = useState('')
     const [likes,setLikes]=useState('')
     const [notCount,setNotCount] = useState([])
+    const [notificationCounts,setNotificationCounts] =useState('')
+    const [notifiModal, setNotifiModal] = useState(false)
+    const [notificationData, setNotificationData] = useState('')
     
 
     useEffect(() => {
-        const getCompany =async () => {
-            try {
-                const  {data}  =await getUser(companyId)
-                console.log(data,'---////////////--');
-                setDetails(data)
-            } catch (error) {
-                console.log(error.message);
-            }
-        }
-        getCompany()
+        socket?.emit("new-user-add", companyId)
 
-       
-        
-    },[socket,likes])
+        getCompany()
+        fetchNotificationCount()
+
+    },[notifiModal])
+
+    const getCompany =async () => {
+        try {
+            const  {data}  =await getUser(companyId)
+            console.log(data,'---////////////--');
+            setDetails(data)
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+    const fetchNotificationCount=async()=>{
+        try {
+            const {data}=await notificationCount(companyId)
+            console.log(data,'count.........');
+            setNotificationCounts(data)
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
 
     useEffect(()=>{
         console.log('useeffect called');
-        socket.emit("new-user-add", companyId)
-        socket.on("get-notification",(data)=>{
+        socket?.on("get-notification",(data)=>{
             console.log(data,'qwertyuio');
+            fetchNotificationCount()
+            getCompany()
             setNotCount((prev)=>[...prev,data])
         })
         setLikes(new Date())
-    },[socket,companyDetails])
+    },[socket])
 
     /* ------------------------------ SEARCH USERS ------------------------------ */
 
@@ -109,10 +124,17 @@ function HeaderCompany() {
 
     /* ------------------------------ notification ------------------------------ */
 
-    const [notifiModal, setNotifiModal] = useState(false)
-    const [notificationData, setNotificationData] = useState('')
-    const handleNotficationBtn = () => {
+   
+    const handleNotficationBtn =async () => {
         // console.log('tyui');
+        try {
+            const {data} = notificationStatus(companyId)
+            console.log(data,'qwertyu');
+        } catch (error) {
+            console.log(error.message);
+        }
+        
+        getCompany()
         setNotifiModal(!notifiModal)
     }
 
@@ -162,6 +184,7 @@ function HeaderCompany() {
 
                         <FaSearch size={20} className='  my-3 ml-4 lg:hidden' onClick={handlebtn} />
                         <TfiBell size={24} className=' my-2 ml-4 font-semibold' onClick={handleNotficationBtn} />
+                        <span class="inline-block py-0.4 px-1 leading-none text-center whitespace-nowrap top-1 align-baseline font-semibold  bg-red-600 text-white rounded-full ml-16 absolute">{notificationCounts==0? '': notificationCounts}</span>
                     </div>
                     <div>
                         <div className='flex items-center space-x-2' onClick={() => setOpenProfile(!openProfile)}>
@@ -189,17 +212,17 @@ function HeaderCompany() {
                 notifiModal ?
 
                     <div class="absolute right-20 max-h-48 z-20 w-60 py-2  overflow-y-scroll no-scrollbar  rounded-md shadow-xl dark:bg-blue-200 top-16 bg-sky-100  ">
-                        {details.notification.map((obj) => {
+                        {details?.notification?.map((obj) => {
 
                     return (
 
                         <div class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
 
-                            <img class="flex-shrink-0 object-cover mx-1 rounded-full w-10 h-10" src={obj.senderId.profilePicture} />
+                            <img class="flex-shrink-0 object-cover mx-1 rounded-full w-10 h-10" src={obj?.senderId?.profilePicture} />
 
 
                             <div class="mx-1 flex ">
-                                <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-900 ">{obj.senderId.username}</h1>
+                                <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-900 ">{obj?.senderId?.username}</h1>
                                 <p class="text-sm font-semibold text-gray-700 dark:text-gray-900 pl-2">{obj.description}</p>
 
                             </div>

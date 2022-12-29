@@ -27,4 +27,8 @@ export const userEventDetail =(eventId)=>userInstance.get(`/company/event/detail
 
 export const findSearchCompany = (data)=> companyInstance.get(`/user/search/${data}`)
 
+export const notificationStatus = (data)=> companyInstance.get(`/company/notification-status/${data}`)
+
+export const notificationCount = (data)=> companyInstance.get(`/company/notification-count/${data}`)
+
 // export const eventShow =()=>axios.get('/company/event-show')

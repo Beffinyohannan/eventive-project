@@ -357,6 +357,29 @@ const eventDetails = async (req, res) => {
     }
 }
 
+const changeNotificationStatus=async(req,res)=>{
+    try {
+        const id = req.params.id
+        const result = await company.updateMany({_id:id},{$set:{'notification.$[].status':false}})
+        console.log(result,'asdfg');
+        if (result) {
+            res.status(200).json({update:true})
+        }
+    } catch (error) {
+        res.json(error.message)
+    }
+}
+
+const notificationCount =async(req,res)=>{
+    try {
+        const id = req.params.id
+        const result = await company.find({_id:id,'notification.status':true}).count()
+        res.status(200).json(result)
+    } catch (error) {
+        res.json(error.message)
+    }
+}
+
 module.exports = {
     companySignup,
     companyLogin,
@@ -376,5 +399,7 @@ module.exports = {
     addEvent,
     eventView,
     singleEventPosts,
-    eventDetails
+    eventDetails,
+    changeNotificationStatus,
+    notificationCount
 }
