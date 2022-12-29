@@ -9,7 +9,7 @@ function EventsView({obj,company}) {
             <div class="px-6 py-4">
                 <div class="font-bold text-xl mb-2">
                     {company?
-                    <Link to={`/company/SingleEvents/${obj._id}`}>{obj.event}</Link> :
+                    <Link to={`/company-SingleEvents/${obj._id}`}>{obj.event}</Link> :
                     <Link to={`/SingleEvents/${obj._id}`}>{obj.event}</Link> 
                     
                     }

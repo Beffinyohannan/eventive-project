@@ -61,7 +61,7 @@ function CompanyLogin() {
                         timer: 1500
                       }).then(()=>{
                         // window.location.href = "/"
-                        navigate('/company/homepage')
+                        navigate('/company-homepage')
                       })
                 }else{
                   Swal.fire({

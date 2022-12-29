@@ -180,7 +180,7 @@ function Post({ obj, setBlock, company, user }) {
                         <div>
                             {/* <p className='font-medium'>{obj.companyId.companyName}</p> */}
                             {company?
-                            <Link  to={`/company/profile/${obj.companyId._id}`} className='font-medium'>{obj.companyName}</Link>:
+                            <Link  to={`/company-profile/${obj.companyId._id}`} className='font-medium'>{obj.companyName}</Link>:
                             <Link  to={`/profile/company/${obj.companyId._id}`} className='font-medium'>{obj.companyName}</Link>
                             }
                             <p className='text-xs text-gray-400'>{format(obj.date)}</p>

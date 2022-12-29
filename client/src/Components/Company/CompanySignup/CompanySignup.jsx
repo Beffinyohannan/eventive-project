@@ -224,7 +224,7 @@ function CompanySignup() {
               <button className='w-full py-2 my-4 bg-green-600 hover:bg-green-500'>Signup</button>
 
             </form>
-            <p className='text-center'>Already have account : <Link to={'/company/login'}>Login </Link></p>
+            <p className='text-center'>Already have account : <Link to={'/company-login'}>Login </Link></p>
           </div>
         </div>
         <ToastContainer/>

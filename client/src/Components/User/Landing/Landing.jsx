@@ -49,7 +49,7 @@ function Landing() {
                     <p className="mt-5 text-lg sm:text-2xl font-medium  text-gray-600">
                         Register as Company, Get Engaged
                     </p>
-                    <Link to={'/company/signup'}>
+                    <Link to={'/company-signup'}>
                         <button
 
                             type="button"

@@ -10,11 +10,11 @@ function CompanyBottomNavbar() {
      const companyId = companyDetails?._id
 
     const Menus=[
-        {name:'Notification',link:'/company/inbox',icon:HiOutlineBell},
-        {name:'Home',link:'/company/homepage',icon:AiOutlineHome},
+        {name:'Notification',link:'/company-inbox',icon:HiOutlineBell},
+        {name:'Home',link:'/company-homepage',icon:AiOutlineHome},
         // {name:'Add Post',link:'/companies',icon:HiOutlineGlobeAlt},
-        // {name:'Profile',link:`/company/profile/${companyId}`,icon:HiUserCircle},
-        { name: 'Events', link: '/company/events', icon: HiOutlineTable },
+        // {name:'Profile',link:`/company-profile/${companyId}`,icon:HiUserCircle},
+        { name: 'Events', link: '/company-events', icon: HiOutlineTable },
         // {name:'Settings',link:'#',icon:HiOutlineCog},
         // {name:'Enquire Event',link:'#',icon:HiOutlineClipboardList},
     ]

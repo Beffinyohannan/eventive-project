@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 const CompanyRouteProtect=()=> {
     let auth = {'token':localStorage.getItem('company-token')} 
   return (
-    auth.token ? <Outlet/> : <Navigate to={"/company/login"} />
+    auth.token ? <Outlet/> : <Navigate to={"/company-login"} />
   )
 }
  

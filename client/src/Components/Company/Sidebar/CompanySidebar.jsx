@@ -16,11 +16,11 @@ function CompanySidebar() {
      console.log(companyId);
 
     const Menus = [
-        { name: 'Home', link: '/company/homepage', icon: AiOutlineHome },
-        { name: 'Inbox', link: '/company/inbox', icon: HiOutlineBell },
+        { name: 'Home', link: '/company-homepage', icon: AiOutlineHome },
+        { name: 'Inbox', link: '/company-inbox', icon: HiOutlineBell },
         // {name:'Add Post',link:'/companies',icon:HiOutlineGlobeAlt},
-        { name: 'Profile', link: `/company/profile/${companyId}`, icon: HiUserCircle },
-        { name: 'Events', link: '/company/events', icon: HiOutlineTable },
+        { name: 'Profile', link: `/company-profile/${companyId}`, icon: HiUserCircle },
+        { name: 'Events', link: '/company-events', icon: HiOutlineTable },
         // { name: 'Settings', link: '#', icon: HiOutlineCog },
         // {name:'Logout',link:'',icon:HiLogout},
         // {name:'Enquire Event',link:'#',icon:HiOutlineClipboardList},
@@ -62,7 +62,7 @@ function CompanySidebar() {
                             showConfirmButton: false,
                             timer: 1500
                         }).then(() => {
-                            navigate('/company/login')
+                            navigate('/company-login')
                         })
                     }
                 },

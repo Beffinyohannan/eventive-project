@@ -309,7 +309,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         try {
             const {data} = await newUSerChat(company)
             console.log(data,'chat ress');
-            navigate('/company/chat')
+            navigate('/company-chat')
           } catch (error) {
             console.log(error);
           //   handleError(error)

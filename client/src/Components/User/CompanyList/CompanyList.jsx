@@ -98,7 +98,7 @@ function CompanyList() {
                                     <img src={obj.profilePicture} className='rounded-full w-16 h-14 sm:h-16' alt="" />
                                 </div>
                                 <div className='ml-2 p-1 '>
-                                    <Link to={`/profile/company/${obj._id}`} className='text-md sm:text-xl font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>
+                                    <Link to={`/profile-company/${obj._id}`} className='text-md sm:text-xl font-medium pb-1 cursor-pointer'>{obj.companyName}</Link>
                                     <p >{obj.email}</p>
                                     <p>{obj.companyType}</p>
                                 </div>

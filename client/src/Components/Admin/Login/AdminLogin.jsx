@@ -55,7 +55,7 @@ function AdminLogin() {
                         timer: 1500
                       }).then(()=>{
                         // window.location.href = "/admin-dashboard"
-                        navigate("/admin/dashboard" ,{replace:true})
+                        navigate("/admin-dashboard" ,{replace:true})
                       })
                 }
             })
