@@ -82,18 +82,6 @@ bash
 ## Screenshots
 
 
-![landingPage](https://github.com/Beffinyohannan/eventive-project/blob/422e326cca46790d60c8bd9baaeb6703113a7844/screenshot/Screenshot_20221229_031925.png)
-
-![signup](screenshot/Screenshot_20221229_032008.png)
-
-![login](screenshot/Screenshot_20221229_032037.png)
-
-![homepage](screenshot/Screenshot_20221229_031753.png)
-
-![event](screenshot/Screenshot_20221229_032113.png)
-
-![profile](screenshot/Screenshot_20221229_032232.png)
-
 
 
 
