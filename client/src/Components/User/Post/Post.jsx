@@ -103,7 +103,13 @@ function Post({ obj, setBlock, company, user }) {
                 console.log(res);
                 setComment('')
                 setViewCmt(!viewCmt)
+                socket.emit("send-notification",{
+                    senderId:userId,
+                    receiverId:obj?.companyId?._id,
+                    type:"commented your post"
+                })
             })
+
         }
 
 
@@ -246,7 +252,7 @@ function Post({ obj, setBlock, company, user }) {
                                 <div className="flex gap-3 py-2 pl-3 items-center bg-white">
                                     <div>
                                         {/* <img className="w-8 rounded-full" src='' alt="profile" /> */}
-                                        <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full' width={30} height={30} alt="" />
+                                        <img src={com.postedBy.profilePicture} className='rounded-full w-10 h-10'  alt="" />
                                     </div>
                                     <div>
                                         <div>

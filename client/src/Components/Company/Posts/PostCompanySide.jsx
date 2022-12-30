@@ -80,7 +80,7 @@ function PostCompanySide() {
                         setDescription('')
                         setEvent('')
                         setBlock(!block)
-                        navigate('/company/homepage')
+                        navigate('/company-homepage')
                     })
                 }
             })

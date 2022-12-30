@@ -211,7 +211,7 @@ function HeaderCompany() {
             {
                 notifiModal ?
 
-                    <div class="absolute right-20 max-h-48 z-20 w-60 py-2  overflow-y-scroll no-scrollbar  rounded-md shadow-xl dark:bg-blue-200 top-16 bg-sky-100  ">
+                    <div class="absolute right-20 max-h-48 z-20 w-60 py-2  overflow-y-scroll no-scrollbar scrollbar-hide  rounded-md shadow-xl dark:bg-slate-100 top-16 bg-sky-100  ">
                         {details?.notification?.map((obj) => {
 
                     return (

@@ -292,13 +292,23 @@ const commentPost = async (req, res) => {
         postedBy: req.body.postBy,
         name: req.body.username
     }
-    //    const cmt = req.body 
     try {
+
+        const details = {
+            senderId: req.body.postedBy,
+            description: 'commented your post'
+        }
+
+        const posts = await post.findById(req.params.id)
+
         const data = await post.findByIdAndUpdate({ _id: req.params.id },
             { $push: { comments: comment } }
         )
 
+
         if (data) {
+
+            await company.updateOne({ _id: posts.companyId }, { $push: { notification: details } }, { upsert: true })
             console.log('qwertyuiop');
             res.status(200).json({ commeted: true })
         }
@@ -318,7 +328,7 @@ const uncommentPost = (req, res) => {
 
 const viewComments = async (req, res) => {
     try {
-        const comment = await post.find({ _id: req.params.id })
+        const comment = await post.find({ _id: req.params.id }).populate('comments.postedBy')
         res.status(200).json(comment)
     } catch (err) {
         console.log(err.message);

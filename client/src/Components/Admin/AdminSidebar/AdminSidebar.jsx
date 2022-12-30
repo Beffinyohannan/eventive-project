@@ -90,10 +90,10 @@ function AdminSidebar() {
                     {/* <span class="ml-2" aria-hidden="true">+</span> */}
                 </button>
             </div>
-            <div className='m-5 flex'>
+            {/* <div className='m-5 flex'>
                 <HiUserCircle size={28} />
                 <h1 className='ml-3'>profile</h1>
-            </div>
+            </div> */}
         </div>
     )
 }
