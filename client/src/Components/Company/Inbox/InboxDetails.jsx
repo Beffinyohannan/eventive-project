@@ -14,7 +14,7 @@ import companyInstance from '../../../axios/companyAuth'
 import { newUSerChat } from '../../../api/ChatRequest'
 
 function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
-    console.log(user);
+    console.log(data);
 
     const [showModal, setShowModal] = useState(false);
     const [modalData, setModalData] = useState({});
@@ -63,7 +63,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                         if (user) {
                             const { data } = await approveQuotation(id)
                             if (data.update == true) {
-                                console.log(data.data, 'heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+                                // console.log(data.data, 'heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
                                 setApprove(!approve)
                                 Swal.fire({
                                     position: 'top-end',
@@ -74,7 +74,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                 })
     
                             } else {
-                                console.log(' error somthing went wrong');
+                                // console.log(' error somthing went wrong');
                                 Swal.fire({
                                     position: 'top-end',
                                     icon: 'success',
@@ -87,7 +87,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                         }else{
                             const { data } = await approveEnq(id)
                             if (data.update == true) {
-                                console.log(data.data, 'heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+                                // console.log(data.data, 'heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
                                 setApprove(!approve)
                                 Swal.fire({
                                     position: 'top-end',
@@ -98,7 +98,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                 })
     
                             } else {
-                                console.log(' error somthing went wrong');
+                                // console.log(' error somthing went wrong');
                                 Swal.fire({
                                     position: 'top-end',
                                     icon: 'success',
@@ -132,7 +132,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                         if (user) {
                             const { data } = await rejectQuotation(id)
                             if (data.update) {
-                                console.log(data.data, 'rejjjjjjjjjjjjjj');
+                                // console.log(data.data, 'rejjjjjjjjjjjjjj');
                                 setApprove(!approve)
                                 Swal.fire({
                                     position: 'top-end',
@@ -142,7 +142,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                     timer: 1500
                                 })
                             } else {
-                                console.log('rejected not completed ');
+                                // console.log('rejected not completed ');
                                 Swal.fire({
                                     position: 'top-end',
                                     // icon: 'success',
@@ -153,9 +153,9 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                             }
                         }else{
                             const  {data}  = await rejectEnq(id) 
-                            console.log(data,'+5555');
+                            // console.log(data,'+5555');
                             if (data.update == true) {
-                                console.log(data.data, 'rejjjjjjjjjjjjjj');
+                                // console.log(data.data, 'rejjjjjjjjjjjjjj');
                                 setApprove(!approve)
                                 Swal.fire({
                                     position: 'top-end',
@@ -165,7 +165,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                                     timer: 1500
                                 })
                             } else {
-                                console.log('rejected not completed ');
+                                // console.log('rejected not completed ');
                                 Swal.fire({
                                     position: 'top-end',
                                     // icon: 'success',
@@ -206,7 +206,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
     const [formValues, setFormValues] = useState(initialValues)
 
     const handleChange = (e) => {
-        console.log(e.target);
+        // console.log(e.target);
         const { name, value } = e.target
         setFormValues({ ...formValues, [name]: value })
         console.log(formValues);
@@ -224,7 +224,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         console.log(Object.keys(errors).length, 'llkklk');
         if (Object.keys(errors).length == 0) {
             companyInstance.post(`/company/eventQuotation?userId=${userId.id}&companyId=${companyId}&enquiryId=${enquiryID}`, { ...formValues }).then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (res.data.form == 'sended') {
                     Swal.fire({
                         position: 'top-end',
@@ -292,7 +292,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         console.log(users);
         try {
           const {data} = await newUSerChat(users)
-          console.log(data,'chat ress');
+        //   console.log(data,'chat ress');
           navigate('/chat')
         } catch (error) {
           console.log(error);
@@ -308,7 +308,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
         console.log(company,'777777777');
         try {
             const {data} = await newUSerChat(company)
-            console.log(data,'chat ress');
+            // console.log(data,'chat ress');
             navigate('/company-chat')
           } catch (error) {
             console.log(error);
@@ -318,6 +318,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
 
     return (
         <>
+       {!data  ? <h1>No datas</h1>:
        
         <div className=' flex justify-between  p-1 px-4 mb-3 bg-white   rounded-2xl border-slate-200 border-t shadow-md'>
             <div className='ml-2 w-52'>
@@ -345,6 +346,7 @@ function InboxDetails({ user, data, approved, pending, approve, setApprove }) {
                     }
             </div>
         </div>
+        }
         
         {user ?
                 <div>

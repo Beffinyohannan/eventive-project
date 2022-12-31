@@ -29,7 +29,7 @@ function Login() {
     console.log(e.target);
     const { name, value } = e.target
     setFormValues({ ...formValues, [name]: value })
-    console.log(formValues);
+    // console.log(formValues);
 
   }
 
@@ -38,8 +38,8 @@ function Login() {
 
     const errors = validateForm(signupData)
     setError(errors)
-    console.log('mmmmmmmmmmmmmmmmmmmmmmmmm');
-    console.log(Object.keys(errors).length, 'llkklk');
+    // console.log('mmmmmmmmmmmmmmmmmmmmmmmmm');
+    // console.log(Object.keys(errors).length, 'llkklk');
     if (Object.keys(errors).length == 0) {
 
       const {data} =await userLogin(signupData)

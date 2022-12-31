@@ -19,7 +19,7 @@ function Profile() {
 
     useEffect(() => {
         userInstance.get(`/profile/${userId}`).then((res) => {
-            console.log(res.data, 'gggggggggggggg');
+            // console.log(res.data, 'gggggggggggggg');
             // setUserDetails(res.data)
             setDetails(res.data)
         })
@@ -38,12 +38,12 @@ function Profile() {
             [name]: value,
         });
 
-        console.log(details);
+        // console.log(details);
     };
 
     const [imageUpload, setImageUpload] = useState('')
     const fileUpload = (e) => {
-        console.log("file upload ann");
+        // console.log("file upload ann");
         setImage(URL.createObjectURL(e.target.files[0]));
 
         setImageUpload(e.target.files[0])
@@ -55,7 +55,7 @@ function Profile() {
 
     const handleEdit = async (e) => {
         e.preventDefault()
-        console.log(details, '77777777777777');
+        // console.log(details, '77777777777777');
 
         try {
 
@@ -67,7 +67,7 @@ function Profile() {
             if (imageUpload) {
 
                 await axios.post('/company/post/upload', data).then((response) => {
-                    console.log(response, 'qqqqqqqqqqqqqqq');
+                    // console.log(response, 'qqqqqqqqqqqqqqq');
                     details.profilePicture = 'https://drive.google.com/uc?export=view&id=' + response.data
                 })
             }

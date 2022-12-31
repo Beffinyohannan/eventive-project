@@ -47,7 +47,7 @@ function Inbox() {
                         userInstance.put("/cancelEnquiry/" + id).then((response) => {
                             console.log(response, 'reject');
                             if (response.status == 200) {
-                                console.log(response.data, 'rejjjjjjjjjjjjjj');
+                                // console.log(response.data, 'rejjjjjjjjjjjjjj');
                                 setApprove(!approve)
                                 // alert('Form Rejected Sucessfully')
                                 Swal.fire({
@@ -58,7 +58,7 @@ function Inbox() {
                                     timer: 1500
                                 })
                             } else {
-                                console.log('rejected not completed ');
+                                // console.log('rejected not completed ');
                                 // alert('Something Went Wrong')
                                 Swal.fire({
                                     position: 'top-end',
@@ -93,7 +93,7 @@ function Inbox() {
 
     useEffect(() => {
         userInstance.get(`/inbox/${userId}`).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             setState(res.data)
         })
     }, [approve])
@@ -115,9 +115,9 @@ function Inbox() {
                             <h2 className='my-4 w-20 md:w-44 font-medium'>{obj.companyId.companyName}</h2>
                             <div className='m-2 '>
                                 <button className='ml-2 my-3 bg-blue-800 text-white px-6 py-0.5 rounded-xl' onClick={(e) => { fullDetails(obj._id) }}>View</button>
-                                {obj.status == 'cancelled'?
-                                <button className='ml-2 my-3 px-3 py-0.5 rounded-xl'>Cancelled</button>:
-                                <button className='ml-2 my-3 bg-slate-900 text-white px-5 py-0.5 rounded-xl' onClick={(e) => { cancelEnquiry(obj._id) }}>Cancel</button>
+                                {obj.status == 'pending'?
+                                <button className='ml-2 my-3 bg-slate-900 text-white px-5 py-0.5 rounded-xl' onClick={(e) => { cancelEnquiry(obj._id) }}>Cancel</button>:
+                                <button className='ml-2 my-3 px-3 py-0.5 rounded-xl'>{obj.status}</button>
                                 }
 
 

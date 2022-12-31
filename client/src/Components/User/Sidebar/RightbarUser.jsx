@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import axios from '../../../api/axios'
 import userInstance from '../../../axios/userAuth'
 import { UserContext } from '../../../Store/UserContext'
 function RightbarUser() {
@@ -28,7 +27,7 @@ function RightbarUser() {
 
     const handleFollow = (id) => {
         userInstance.put(`/follow/${userId}`, { id }).then((res) => {
-            console.log(res);
+            // console.log(res);
             setFollow(!follow)
 
         })

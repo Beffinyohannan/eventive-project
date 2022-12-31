@@ -34,6 +34,11 @@ function InboxUser() {
         })
     }, [approve])
 
+    const pen = state.filter(obj => obj.status === 'pending')
+    // console.log(pen.length, '111111111');
+    const accept = state.filter(obj => obj.status == 'accepted')
+    const rejected = state.filter(obj => obj.status == 'rejected')
+
 
     return (
         <div className=' flex md:justify-end mt-5 bg-slate-50'>
@@ -47,24 +52,24 @@ function InboxUser() {
                         </header>
                         {enquire ?
                             <div>
-                                {
-                                    state.filter(obj => obj.status == 'pending').map((obj, index) => (
+                                {pen.length === 0 ? <h1 className=' text-center'>No data</h1> :
+                                    pen.map((obj, index) => (
                                         <InboxDetails user={userId} pending={true} approve={approve} setApprove={setApprove} data={obj} />
                                     ))}
                             </div>
                             :
                             (rej ?
                                 <div>
-                                    {
-                                        state.filter(obj => obj.status == 'accepted').map((obj, index) => {
+                                    {accept.length === 0 ? <h1 className=' text-center'>No data</h1> :
+                                        accept.map((obj, index) => {
                                             return (
                                                 <InboxDetails user={userId} approved={true} data={obj} />
                                             )
                                         })}
                                 </div> :
                                 <div>
-                                    {
-                                        state.filter(obj => obj.status == 'rejected').map((obj, index) => {
+                                    {rejected.length === 0 ? <h1 className=' text-center'>No data</h1> :
+                                        rejected.map((obj, index) => {
                                             return (
                                                 <InboxDetails user={userId} data={obj} />
                                             )

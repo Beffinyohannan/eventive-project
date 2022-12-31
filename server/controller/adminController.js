@@ -112,7 +112,7 @@ const unblockCompany = (req, res) => {
 
 const posts = async (req, res) => {
     try {
-        const data = await post.find().sort({ date: -1 })
+        const data = await post.find().sort({ date: -1 }).populate('comments.postedBy')
         // console.log(data);
         res.json(data)
 

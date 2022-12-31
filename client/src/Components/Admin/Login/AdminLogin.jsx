@@ -20,10 +20,10 @@ function AdminLogin() {
     }
 
     const handleChange = (e) => {
-        console.log(e.target);
+        // console.log(e.target);
         const { name, value } = e.target
         setFormValues({ ...formValues, [name]: value })
-        console.log(formValues);
+        // console.log(formValues);
 
     }
 
@@ -41,9 +41,8 @@ function AdminLogin() {
             // console.log("hello");
 
             axios.post('/admin/login', { ...formValues }).then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response.data.state == "ok") {
-                    // alert("login sucessful")
                      window.localStorage.setItem("admin-token",response.data.data)
 
                    

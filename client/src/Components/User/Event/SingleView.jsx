@@ -6,7 +6,7 @@ import { eventDetail, singleEventPost, userEventDetail, userSingleEventPost } fr
 import Post from '../Post/Post'
 import EventsView from './EventsView'
 
-function SingleView({ company }) {
+function SingleView({ company,user }) {
 
   const eventId = useParams().id
   const [singlePost, setSinglePost] = useState([])
@@ -14,7 +14,7 @@ function SingleView({ company }) {
   
 
 
-  console.log(company, 'llll');
+  // console.log(company, 'llll');
 
   useEffect(() => {
     const singleEvent = async () => {
@@ -39,7 +39,7 @@ function SingleView({ company }) {
       try {
         if(company){
           const { data } = await eventDetail(eventId)
-          console.log(data, 'qwerty');
+          // console.log(data, 'qwerty');
           setDetails(data)
         }else{
           const { data } = await userEventDetail(eventId)
@@ -91,7 +91,7 @@ function SingleView({ company }) {
             <div className='flex   justify-center'>
               {company ?
               <Post key={obj._id} obj={obj} company={company} /> :
-              <Post key={obj._id} obj={obj} />  
+              <Post key={obj._id} obj={obj} user={user} />  
               }
             </div>
           ))}

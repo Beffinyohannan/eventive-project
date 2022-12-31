@@ -295,7 +295,7 @@ const commentPost = async (req, res) => {
     try {
 
         const details = {
-            senderId: req.body.postedBy,
+            senderId: req.body.postBy,
             description: 'commented your post'
         }
 

@@ -25,8 +25,8 @@ function Dashboard() {
             borderWidth:2,
           }]
         })
-        console.log(datas, '*********');
-        console.log(Object.keys(datas).length,'+++++++++++');
+        // console.log(datas, '*********');
+        // console.log(Object.keys(datas).length,'+++++++++++');
 
 
         

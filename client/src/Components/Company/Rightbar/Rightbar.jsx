@@ -16,7 +16,7 @@ function Rightbar() {
     }
     try {
       const { data } = await findSearchCompany(val)
-      console.log(data, 'jjjjjj');
+      // console.log(data, 'jjjjjj');
       setSearchUser(data)
     } catch (error) {
       console.log(error);

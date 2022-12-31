@@ -37,7 +37,7 @@ function Header() {
     useEffect(() => {
         
         userInstance.get(`/profile/${userId}`).then((res) => {
-            console.log(res.data, 'gggggggggggggg');
+            // console.log(res.data, 'gggggggggggggg');
             // setUserDetails(res.data)
             setDetails(res.data)
         })
@@ -102,7 +102,7 @@ function Header() {
     const [notifiModal, setNotifiModal] = useState(false)
     const [notificationData,setNotificationData] = useState('')
     const handleNotficationBtn = () => {
-        console.log('tyui');
+        // console.log('tyui');
         setNotifiModal(!notifiModal)
     }
 
@@ -128,7 +128,7 @@ function Header() {
                         <div className='absolute mt-32 mr-32 lg:mr-60'>
                             {serachUser.map((obj) => (
                                 <div>
-                                    <Link to={`/profile-company/${obj._id}`}>
+                                    <Link to={`/profile/company/${obj._id}`}>
                                         <a class="flex items-center px-3 py-2 text-sm transition duration-150  ease-in-out border-b border-gray-300 cursor-pointer hover:bg-gray-100 focus:outline-none">
                                             <img class="object-cover w-10 h-10 rounded-full"
                                                 src={obj.profilePicture} alt="username" />
@@ -147,10 +147,10 @@ function Header() {
 
                     <div className='flex pr-5'>
                         <FaSearch size={20} className='h-12 mt-2 ml-3' onClick={handlebtn} />
-                        <TfiBell size={24} className='h-12 my-2 ml-4 ' onClick={handleNotficationBtn} />
+                        {/* <TfiBell size={24} className='h-12 my-2 ml-4 ' onClick={handleNotficationBtn} /> */}
                     </div>
                     <div>
-                        <div className='flex items-center space-x-2' onClick={() => setOpenProfile(!openProfile)} >
+                        <div className='flex items-center space-x-2 mr-6 md:mr-0' onClick={() => setOpenProfile(!openProfile)} >
                             <img src={details.profilePicture} className='rounded-full w-10 h-10' alt="" />
                             <div>
                                 <Link className='font-medium'>
@@ -159,7 +159,7 @@ function Header() {
                             </div>
                         </div>
                         {openProfile ?
-                            <div className='absolute mt-2  border shadow-md rounded-xl px-5 py-2  cursor-pointer text-xl font-medium bg-slate-50'>
+                            <div className='absolute mt-2   border shadow-md rounded-xl px-5 py-2  cursor-pointer text-xl font-medium bg-slate-50'>
                                 <ul >
                                     <li className='hover:bg-gray-200 rounded-md px-2 py-2'><Link to={'/profile'}>Profile</Link> </li>
                                     <li className='hover:bg-gray-200 rounded-md px-2 py-2' onClick={logout}>  Logout</li>

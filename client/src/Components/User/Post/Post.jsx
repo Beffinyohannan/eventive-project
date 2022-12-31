@@ -50,13 +50,13 @@ function Post({ obj, setBlock, company, user }) {
             companyInstance.get(`/post/viewComments/${obj._id}`).then((res) => {
                 const data = res.data[0]
                 setViewAllComment(res.data[0].comments)
-                console.log(viewAllComment,'&&&&&&&&&&');
+                // console.log(viewAllComment,'&&&&&&&&&&');
             })
         }else{
             userInstance.get(`/post/viewComments/${obj._id}`).then((res) => {
                 const data = res.data[0]
                 setViewAllComment(res.data[0].comments)
-                console.log(viewAllComment,'&&&&&&&&&&');
+                // console.log(viewAllComment,'&&&&&&&&&&');
             }) 
         }
     }, [viewCmt])
@@ -97,7 +97,7 @@ function Post({ obj, setBlock, company, user }) {
         const errors = validateForm(comment)
         setError(errors)
         // console.log(error, 'mmmmmmmmmmmmmmmmmmmmmmmmm');
-        console.log(Object.keys(errors).length, 'llkklk');
+        // console.log(Object.keys(errors).length, 'llkklk');
         if (Object.keys(errors).length == 0) {
             userInstance.put(`/post/comment/${obj._id}`, datas).then((res) => {
                 console.log(res);
@@ -153,7 +153,7 @@ function Post({ obj, setBlock, company, user }) {
             console.log(data.report, 'block response');
             setBlock(Date.now())
             if (data.report) {
-                console.log('12345678901234567890-');
+                // console.log('12345678901234567890-');
                 toast.success('Post Reported', {
                     position: "top-right",
                     autoClose: 2000,
@@ -246,13 +246,14 @@ function Post({ obj, setBlock, company, user }) {
 
                 <div className='flex flex-col '>
                     <div className={` max-h-32 overflow-auto scrollbar-hide ${company? 'rounded-b-2xl   shadow-md':'' } `} >
-                        {viewAllComment.map((com, i) => {
+                        {viewAllComment.length == 0 ? (<h1 className='bg-white ml-5'>No comments</h1>):
+                        viewAllComment.map((com, i) => {
                             return (
 
                                 <div className="flex gap-3 py-2 pl-3 items-center bg-white">
                                     <div>
                                         {/* <img className="w-8 rounded-full" src='' alt="profile" /> */}
-                                        <img src={com.postedBy.profilePicture} className='rounded-full w-10 h-10'  alt="" />
+                                        <img src={com?.postedBy?.profilePicture} className='rounded-full w-10 h-10'  alt="" />
                                     </div>
                                     <div>
                                         <div>

@@ -43,7 +43,7 @@ function UserSignup() {
     const errors = validateForm(signupData)
     setError(errors)
 
-    console.log(Object.keys(errors).length, 'llkklk');
+    // console.log(Object.keys(errors).length, 'llkklk');
     if (Object.keys(errors).length === 0) {
       // console.log("hello");
 
@@ -144,7 +144,7 @@ function UserSignup() {
 
     try {
       const { data } = await resendOtpCall(formValues.email)
-      console.log(data);
+      // console.log(data);
       if (data.status) {
         toast.success(data.message)
         setResend(false)

@@ -24,8 +24,7 @@ function ProfileCompany({ company, userId }) {
     // console.log(companyDetails, 1223123);
     const companyId = useParams().id
     const [post, setPost] = useState([])
-    // console.log(post,'##########');
-    // const PF = process.env.REACT_APP_PUBLIC_FOLDER
+   
     const [showSecondModal, setShowSecondModal] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [modalData, setModalData] = useState({});
@@ -53,7 +52,7 @@ function ProfileCompany({ company, userId }) {
                     id: obj._id, name: obj.companyName, description: obj.description, image: obj.image, comments: obj.comments, likes: obj.likes, date: obj.date, profilePicture: obj.companyId.profilePicture
                 })
                 setShowSecondModal(true)
-                console.log(modalData, '/////////////modaldata');
+                // console.log(modalData, '/////////////modaldata');
             }
         })
     }
@@ -94,13 +93,13 @@ function ProfileCompany({ company, userId }) {
             [name]: value,
         });
 
-        console.log(details);
+        // console.log(details);
     };
 
     const [imageUpload,setImageUpload] = useState('')
 
     const fileUpload = (e) => {
-        console.log("file upload ann");
+        // console.log("file upload ann");
         setImage(URL.createObjectURL(e.target.files[0]));
 
         // setDetails({
@@ -122,7 +121,7 @@ function ProfileCompany({ company, userId }) {
             if(imageUpload){
 
                 await axios.post('/company/post/upload', data).then((response) => {
-                    console.log(response, 'qqqqqqqqqqqqqqq');
+                    // console.log(response, 'qqqqqqqqqqqqqqq');
                     details.profilePicture = 'https://drive.google.com/uc?export=view&id=' + response.data
                 })
             }
@@ -211,7 +210,7 @@ function ProfileCompany({ company, userId }) {
         // console.log(companyId);
         const id = companyId
         userInstance.put(`/follow/${userId}`, { id }).then((res) => {
-            console.log(res);
+            // console.log(res);
             setFollow(!follow)
 
         })
@@ -259,9 +258,9 @@ function ProfileCompany({ company, userId }) {
                                             <button className='ml-4 w-24 h-10 mr-3 mt-5 bg-slate-900 text-white px-2 py-0.5 rounded-2xl' onClick={handleFollow} > {!details?.followers?.includes(userId) ? ' follow ' : 'unfollow'}</button>
                                             : ''}
                                         {company === companyId ?
-                                            <div>
-                                                <button className='m-5 bg-slate-400 rounded-md px-2' onClick={() => setShowEditModal(true)}>Edit</button>
-                                            </div>
+                                            <span>
+                                                <button className='mt-5 bg-slate-400 rounded-md px-2' onClick={() => setShowEditModal(true)}>Edit</button>
+                                            </span>
                                             : ""}
                                     </div>
                                     <div className="text-start mt-5 pl-5">

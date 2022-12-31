@@ -31,9 +31,9 @@
 const jwt = require('jsonwebtoken')
 
 const  check = (req,res,next)=>{
-    console.log('in verify');
+    // console.log('in verify');
     const token = req.headers.accesstoken;
-    console.log(token,'its token');
+    // console.log(token,'its token');
     if(!token){
         res.status(403).json("Account verification failed")
     }else {
@@ -43,7 +43,7 @@ const  check = (req,res,next)=>{
                 res.status(403).json({auth:false, message:"Authentication Failed!"})
             }else{
                 req.userId = decoded.id;
-                console.log('verify ok');
+                // console.log('verify ok');
                 next()
             }
         })

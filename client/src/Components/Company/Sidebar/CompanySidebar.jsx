@@ -12,8 +12,8 @@ import { CompanyContext } from '../../../Store/CompanyContext'
 
 function CompanySidebar() {
     const { companyDetails, setCompanyDetails } = useContext(CompanyContext)
-     const companyId = companyDetails?._id
-     console.log(companyId);
+    const companyId = companyDetails?._id
+    console.log(companyId);
 
     const Menus = [
         { name: 'Home', link: '/company-homepage', icon: AiOutlineHome },
@@ -27,11 +27,11 @@ function CompanySidebar() {
     ]
 
     const [open, setOpen] = useState(true)
-    const [active,setActive]=useState()
-    
+    const [active, setActive] = useState()
 
-    const handleClick=()=>{
-        setActive(current=>!current)
+
+    const handleClick = () => {
+        setActive(current => !current)
     }
 
 
@@ -40,10 +40,8 @@ function CompanySidebar() {
 
 
     const logout = (() => {
-        console.log('gfdghsfgdfjgjhkj');
-        // removeCookie("admin-token")
-        // alert('Logout Sucessfully')
-        // window.location.href="/admin-login"
+        // console.log('gfdghsfgdfjgjhkj');
+       
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to Logout.',
@@ -74,6 +72,13 @@ function CompanySidebar() {
         });
 
     })
+    //     < button
+    // class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-900 border border-transparent rounded-lg active:bg-green-700 hover:bg-green-800 focus:outline-none focus:shadow-outline-purple"
+    // onClick = { logout }
+    //     >
+    //     Logout
+    // {/* <span class="ml-2" aria-hidden="true">+</span> */ }
+    //             </button >
 
     return (
         <div className={`bg-slate-100 min-h-screen ${open ? 'w-72' : 'w-16'} duration-500  text-black px-4 hidden  md:w-40 lg:w-72 md:block fixed border `}>
@@ -90,25 +95,21 @@ function CompanySidebar() {
             <div className='mt-4 flex flex-col gap-4 relative'>
                 {
                     Menus?.map((menu, i) => (
-                        <Link to={menu?.link} key={i} className="group flex items-center text-lg gap-3.5 font-medium p-2 hover:bg-gray-200 rounded-md" onClick={()=>setActive(i)} >
+                        <Link to={menu?.link} key={i} className="group flex items-center text-lg gap-3.5 font-medium p-2 hover:bg-gray-200 rounded-md" onClick={() => setActive(i)} >
                             <div>{React.createElement(menu?.icon, { size: "24" })}</div>
                             <h2
                                 style={{ transitionDelay: `${i + 2}00ms`, }}
-                                className={`whitespace-pre duration-500 ${active=== i ? "bg-slate-200":""}  `} >{menu?.name}</h2>
-                            
+                                className={`whitespace-pre duration-500 ${active === i ? "bg-slate-200" : ""}  `} >{menu?.name}</h2>
+
                         </Link>
                     ))
                 }
-                <button
-                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-900 border border-transparent rounded-lg active:bg-green-700 hover:bg-green-800 focus:outline-none focus:shadow-outline-purple"
-                    onClick={logout}
-                >
-                    Logout
-                    {/* <span class="ml-2" aria-hidden="true">+</span> */}
-                </button>
+
             </div>
+
         </div>
     )
+
 }
 
 export default CompanySidebar

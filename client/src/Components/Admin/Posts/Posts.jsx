@@ -13,21 +13,20 @@ function Posts() {
 
   const [state, setState] = useState([])
   const [block, setBlock] = useState(false)
-  // const PF = process.env.REACT_APP_PUBLIC_FOLDER
-  // console.log(PF,"pfff");
+
 
 
   useEffect(() => {
-    const postView =async()=>{
+    const postView = async () => {
       try {
-        const {data} = await viewPostAdmin()
+        const { data } = await viewPostAdmin()
         setState(data)
       } catch (error) {
         console.log(error.message);
       }
     }
     postView()
-    
+
   }, [block])
 
   const blockUser = (id) => {
@@ -41,9 +40,8 @@ function Posts() {
             adminInstance.post("/admin/block-post/" + id).then((response) => {
               console.log(response, 'reject');
               if (response.status == 200) {
-                console.log(response.data, 'rejjjjjjjjjjjjjj');
+                // console.log(response.data, 'rejjjjjjjjjjjjjj');
                 setBlock(!block)
-                // alert('Form Rejected Sucessfully')
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',
@@ -52,8 +50,7 @@ function Posts() {
                   timer: 1500
                 })
               } else {
-                console.log('rejected not completed ');
-                // alert('Something Went Wrong')
+                // console.log('rejected not completed ');
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',
@@ -64,7 +61,6 @@ function Posts() {
               }
             }).catch((error) => {
               console.log(error.message, 'rrrrrrrrrrrr');
-              // alert(error.message)
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -94,9 +90,8 @@ function Posts() {
             adminInstance.post("/admin/unblock-post/" + id).then((response) => {
               console.log(response, 'reject');
               if (response.status == 200) {
-                console.log(response.data, 'rejjjjjjjjjjjjjj');
+                // console.log(response.data, 'rejjjjjjjjjjjjjj');
                 setBlock(!block)
-                // alert('Form Rejected Sucessfully')
                 Swal.fire({
                   position: 'top-end',
                   icon: 'success',
@@ -116,8 +111,7 @@ function Posts() {
                 })
               }
             }).catch((error) => {
-              console.log(error.message, 'rrrrrrrrrrrr');
-              // alert(error.message)
+              // console.log(error.message, 'rrrrrrrrrrrr');
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -153,12 +147,11 @@ function Posts() {
     })
   }
 
+ 
+
   return (
     <div className='w-4/5'>
-      {/* <div className='m-6 pb-2 pr-7'>
- <button className='border w-50 px-4 py-1 rounded-full float-right  bg-slate-700  hover:bg-slate-600  text-white' >Logout</button>
-
-  </div> */}
+      
       <div class="bg-white p-8 rounded-md  ">
 
         <div class=" flex items-center justify-between pb-6 ">
@@ -310,13 +303,15 @@ function Posts() {
 
                                           <h1 className="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Post Comments</h1>
                                           <div className=' max-h-40 overflow-auto scrollbar-hide' >
-                                            {viewAllComment.map((com, i) => {
-                                              return (
 
+
+                                            {viewAllComment.length == 0 ? (<h1>No comments</h1>):
+                                            viewAllComment.map((com, i) => {
+                                              return (
+                                          
                                                 <div className="flex gap-3 py-2 pl-3 items-center bg-white">
                                                   <div>
-                                                    {/* <img className="w-8 rounded-full" src='' alt="profile" /> */}
-                                                    <img src="https://imgs.search.brave.com/JC3yuRG8o8d2G-kk-gDv7DrSKVLLPa5QoIK2uoMr9QE/rs:fit:641:225:1/g:ce/aHR0cHM6Ly90c2U0/Lm1tLmJpbmcubmV0/L3RoP2lkPU9JUC5V/enVZTVhkQjNEUFVu/UE9ld2hha0N3SGFG/ZSZwaWQ9QXBp" className='rounded-full' width={30} height={30} alt="" />
+                                                    <img src={com?.postedBy?.profilePicture} className='rounded-full w-10 h-10'  alt="" />
                                                   </div>
                                                   <div>
                                                     <div>
@@ -325,10 +320,12 @@ function Posts() {
                                                     </div>
                                                     <p className="text-slate-500 text-xs ">{format(com.created)}</p>
                                                   </div>
-
                                                 </div>
                                               )
-                                            })}
+                                            })
+                                            }
+
+
                                           </div>
 
                                           <button className="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onClick={() => setShowModal(false)} >

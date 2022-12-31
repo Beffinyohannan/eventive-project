@@ -32,7 +32,7 @@ function EnquireForm() {
         console.log(e.target);
         const { name, value } = e.target
         setFormValues({ ...formValues, [name]: value })
-        console.log(formValues);
+        // console.log(formValues);
 
     }
     const fullDetails = (e) => {
@@ -40,11 +40,11 @@ function EnquireForm() {
         const errors = validateForm(formData)
         setError(errors)
         console.log('mmmmmmmmmmmmmmmmmmmmmmmmm');
-        console.log(Object.keys(errors).length, 'llkklk');
+        // console.log(Object.keys(errors).length, 'llkklk');
         if (Object.keys(errors).length == 0) {
 
             userInstance.get('/view-companies').then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setState(res.data)
             })
             setShowModal(true)
@@ -56,7 +56,7 @@ function EnquireForm() {
             id
         ])
     }
-    console.log(com, '000000000000000');
+    // console.log(com, '000000000000000');
 
 
 

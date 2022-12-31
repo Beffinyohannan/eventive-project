@@ -22,11 +22,12 @@ function PostCompanySide() {
     // const companyId = companyDetails._id
     const [postView, setPostView] = useState([])
     const [block, setBlock] = useState(false)
+    const [error, setError] = useState({});
 
 
     // const comp = JSON.parse(localStorage.getItem('company'))
     // console.log(comp, 'mmmmmmmmmmmmmm');
-    console.log(event, 'ooooooo42oooooooooooo');
+    // console.log(event, 'ooooooo42oooooooooooo');
 
 
     const onInuputChange = (e) => {
@@ -44,48 +45,58 @@ function PostCompanySide() {
     const onFormsubmit = async (e) => {
         e.preventDefault()
 
-        const newPost = {
-            companyId: companyDetails._id,
-            companyName: companyDetails.companyName,
-            description: description,
-            eventType: event
-        }
-        const data = new FormData();
-        const fileName = file.name
-        data.append('file', file)
-        data.append("name", fileName)
-        try {
-            await axios.post('/company/post/upload', data).then((response) => {
-                console.log(response, 'qqqqqqqqqqqqqqq');
-                newPost.image = 'https://drive.google.com/uc?export=view&id=' + response.data
-            })
+        const errors = validateForm(description, file, event)
+        setError(errors)
 
-        } catch (error) {
-            console.log(error);
-        }
+        // console.log(Object.keys(errors).length, 'llkklk');
+        if (Object.keys(errors).length == 0) {
+            // console.log("hello");
 
-        try {
-            companyInstance.post('/company/newPost/upload', newPost).then((res) => {
-                console.log(res, 'qwerty');
-                if (res.data.posted == true) {
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Post Added',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
 
-                        setShowImage('')
-                        setDescription('')
-                        setEvent('')
-                        setBlock(!block)
-                        navigate('/company-homepage')
-                    })
-                }
-            })
-        } catch (error) {
-            console.log(error);
+            const newPost = {
+                companyId: companyDetails._id,
+                companyName: companyDetails.companyName,
+                description: description,
+                eventType: event
+            }
+            const data = new FormData();
+            const fileName = file.name
+            data.append('file', file)
+            data.append("name", fileName)
+            try {
+                await axios.post('/company/post/upload', data).then((response) => {
+                    console.log(response, 'qqqqqqqqqqqqqqq');
+                    newPost.image = 'https://drive.google.com/uc?export=view&id=' + response.data
+                })
+
+            } catch (error) {
+                console.log(error);
+            }
+
+            try {
+                companyInstance.post('/company/newPost/upload', newPost).then((res) => {
+                    // console.log(res, 'qwerty');
+                    if (res.data.posted == true) {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: 'Post Added',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+
+                            setShowImage('')
+                            setDescription('')
+                            setEvent('')
+                            setBlock(!block)
+                            navigate('/company-homepage')
+                        })
+                    }
+                })
+            } catch (error) {
+                console.log(error);
+            }
+
         }
 
         // const formData = new FormData()
@@ -128,6 +139,23 @@ function PostCompanySide() {
         // }).catch((err) => {
         //     console.log(err.message);
         // })
+    }
+
+    const validateForm = (des, file, event) => {
+        const error = {};
+
+        if (!des) {
+            error.description = "description required"
+        }
+
+        if (!file) {
+            error.file = "image required"
+        }
+        if (!event) {
+            error.event = "event required"
+        }
+
+        return error;
     }
 
     useEffect(() => {
@@ -177,23 +205,22 @@ function PostCompanySide() {
                         {eventShow.map((obj) => (
                             <option value={obj._id} >{obj.event}</option>
                         ))}
-                        {/* <option value="orange">Orange</option>
-                                <option value="yellow">Yellow</option>
-                                <option value="green">Green</option>
-                                <option value="blue">Blue</option>
-                                <option value="indigo">Indigo</option>
-                                <option value="violet">Violet</option> */}
+
                     </select>
+                    <p className='text-red-500'>{error.event}</p>
                 </div>
                 <div className='p-2 mt-2'>
                     <textarea className='border w-full h-12 md:w-full' name="" id="" cols="70" rows="21" value={description}
                         onChange={(e) => { setDescription(e.target.value) }}></textarea>
+                    <p className='text-red-500'>{error.description}</p>
                 </div>
                 <img src={showImage} alt="" className='w-32' />
                 <div className='flex justify-between'>
-
-                    <label className='p-2 cursor-pointer' htmlFor="img-upload"><HiPhotograph size={26} />  </label>
-                    <input type="file" id="img-upload" name='image' onChange={onInuputChange} className='hidden' />
+                    <div>
+                        <label className=' cursor-pointer' htmlFor="img-upload"><HiPhotograph size={26} />  </label>
+                        <input type="file" id="img-upload" name='image' onChange={onInuputChange} className='hidden' />
+                        <p className='text-red-500'>{error.file}</p>
+                    </div>
                     <button className='bg-slate-900 text-white px-4 ' type='submit' onClick={onFormsubmit} >Post</button>
 
                 </div>

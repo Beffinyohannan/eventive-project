@@ -31,7 +31,7 @@ function CompanyList() {
 
     const handleFollow = (id) => {
         userInstance.put(`/follow/${userId}`, { id }).then((res) => {
-            console.log(res);
+            // console.log(res);
             setFollow(!follow)
 
         })
@@ -48,7 +48,7 @@ function CompanyList() {
         }
         try {
             const { data } = await findSearch(val)
-            console.log(data, 'jjjjjj');
+            // console.log(data, 'jjjjjj');
             setSearchUser(data)
         } catch (error) {
             console.log(error);

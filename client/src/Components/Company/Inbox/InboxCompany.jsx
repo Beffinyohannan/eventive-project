@@ -11,7 +11,7 @@ function InboxCompany() {
     const [enquire, setEnquire] = useState(true)
     const [rej, setRej] = useState(false)
     const [approve, setApprove] = useState(false)
-  
+
     const handleEnquire = (e) => {
         e.preventDefault()
         setEnquire(true)
@@ -29,10 +29,15 @@ function InboxCompany() {
 
     useEffect(() => {
         companyInstance.get(`/company/inbox/${companyId}`).then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             setState(res.data)
         })
     }, [approve])
+
+    const pen = state.filter(obj => obj.status === 'pending')
+    // console.log(pen.length, '111111111');
+    const accept = state.filter(obj => obj.status == 'accepted' || obj.status == 'replayed')
+    const rejected = state.filter(obj => obj.status == 'rejected')
 
 
     return (
@@ -47,28 +52,34 @@ function InboxCompany() {
                         </header>
                         {enquire ?
                             <div>
-                                {
-                                    state.filter(obj => obj.status == 'pending').map((obj, index) => (
-                                        <InboxDetails pending={true} approve={approve} setApprove={setApprove} data={obj}  />
-                                    ))}
+                                {pen.length === 0 ? <h1 className=' text-center'>No data</h1> :
+                                    pen.map((obj, index) => (
+
+                                        <InboxDetails pending={true} approve={approve} setApprove={setApprove} data={obj} />
+                                    ))
+                                }
+
+
                             </div>
                             :
                             (rej ?
                                 <div>
-                                    {
-                                        state.filter(obj => obj.status == 'accepted' || obj.status == 'replayed' ).map((obj, index) => {
+                                    {accept.length === 0 ? <h1 className=' text-center'>No data</h1> :
+                                        accept.map((obj, index) => {
                                             return (
-                                                    <InboxDetails approved={true} approve={approve} setApprove={setApprove} data={obj} />
+                                                <InboxDetails approved={true} approve={approve} setApprove={setApprove} data={obj} />
                                             )
-                                        })}
+                                        })
+                                    }
                                 </div> :
                                 <div>
-                                    {
-                                        state.filter(obj => obj.status == 'rejected').map((obj, index) => {
+                                    {rejected.length === 0 ? <h1 className=' text-center'>No data </h1> :
+                                        rejected.map((obj, index) => {
                                             return (
-                                                <InboxDetails data={obj}  />
+                                                <InboxDetails data={obj} />
                                             )
-                                        })}
+                                        })
+                                        }
                                 </div>
                             )
                         }

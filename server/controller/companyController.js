@@ -373,8 +373,12 @@ const changeNotificationStatus=async(req,res)=>{
 const notificationCount =async(req,res)=>{
     try {
         const id = req.params.id
-        const result = await company.find({_id:id,'notification.status':true}).count()
-        res.status(200).json(result)
+        const result = await company.findOne({_id:id})
+        // console.log(result.notification)
+        const arr = result.notification
+        const arrResult = arr.map((item)=>item.status).filter((item)=>item=="true")
+        // console.log(arrResult.length)
+        res.status(200).json(arrResult.length)
     } catch (error) {
         res.json(error.message)
     }

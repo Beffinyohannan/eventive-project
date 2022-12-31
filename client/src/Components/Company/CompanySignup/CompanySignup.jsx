@@ -21,10 +21,10 @@ function CompanySignup() {
   }
 
   const handleChange = (e) => {
-    console.log(e.target);
+    // console.log(e.target);
     const { name, value } = e.target
     SetFormValues({ ...formValues, [name]: value })
-    console.log(formValues);
+    // console.log(formValues);
   }
 
   const [formError, setFormError] = useState("")
@@ -123,7 +123,7 @@ function CompanySignup() {
 
     try {
       const { data } = await resendOtpCall(formValues.email)
-      console.log(data);
+      // console.log(data);
       if (data.status) {
         toast.success(data.message)
         setResend(false)

@@ -27,7 +27,7 @@ function Event({ company }) {
         setShowImage(URL.createObjectURL(e.target.files[0]))
         setFile(e.target.files[0])
 
-        console.log(file);
+        // console.log(file);
 
     }
 
@@ -47,13 +47,13 @@ function Event({ company }) {
         data.append("name", fileName)
         try {
             await axios.post('/company/post/upload', data).then((response) => {
-                console.log(response, 'qqqqqqqqqqqqqqq');
+                // console.log(response, 'qqqqqqqqqqqqqqq');
                 newEvent.image = 'https://drive.google.com/uc?export=view&id=' + response.data
             })
 
             await companyInstance.post('/company/addEvent', newEvent).then((response) => {
-                console.log('image added');
-                console.log(response.data);
+                // console.log('image added');
+                // console.log(response.data);
                 if (response.data.event) {
                     toast.success('New Event Added', {
                         position: "top-right",
@@ -119,9 +119,9 @@ function Event({ company }) {
             try {
                 if (company) {
                     const { data } = await viewEvents()
-                    console.log(data, "lknjbhgvg");
+                    // console.log(data, "lknjbhgvg");
                     setEventView(data)
-                    console.log(eventView);
+                    // console.log(eventView);
                 } else {
                     const { data } = await userViewEvents()
                     setEventView(data)

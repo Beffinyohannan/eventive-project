@@ -22,17 +22,14 @@ function Feed() {
   useEffect((e) => {
     // console.log('useeffect called');
     userInstance.get(`/viewPosts/${userId}`).then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       setPosts(response.data)
-      console.log(posts);
+      // console.log(posts);
 
     })
   }, [block, follow])
 
   /* ------------------------------- follow user ------------------------------ */
-
-
-
 
 
 

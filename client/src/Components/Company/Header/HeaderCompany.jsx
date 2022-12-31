@@ -23,6 +23,7 @@ function HeaderCompany() {
     const [notificationCounts,setNotificationCounts] =useState('')
     const [notifiModal, setNotifiModal] = useState(false)
     const [notificationData, setNotificationData] = useState('')
+
     
 
     useEffect(() => {
@@ -36,7 +37,7 @@ function HeaderCompany() {
     const getCompany =async () => {
         try {
             const  {data}  =await getUser(companyId)
-            console.log(data,'---////////////--');
+            // console.log(data,'---////////////--');
             setDetails(data)
         } catch (error) {
             console.log(error.message);
@@ -46,7 +47,7 @@ function HeaderCompany() {
     const fetchNotificationCount=async()=>{
         try {
             const {data}=await notificationCount(companyId)
-            console.log(data,'count.........');
+            // console.log(data,'count.........');
             setNotificationCounts(data)
         } catch (error) {
             console.log(error.message);
@@ -55,7 +56,7 @@ function HeaderCompany() {
 
     useEffect(()=>{
         console.log('useeffect called');
-        socket?.on("get-notification",(data)=>{
+        socket.on("get-notification",data=>{
             console.log(data,'qwertyuio');
             fetchNotificationCount()
             getCompany()
@@ -75,7 +76,7 @@ function HeaderCompany() {
         }
         try {
             const { data } = await findSearchCompany(val)
-            console.log(data, 'jjjjjj');
+            // console.log(data, 'jjjjjj');
             setSearchUser(data)
         } catch (error) {
             console.log(error);
@@ -90,7 +91,7 @@ function HeaderCompany() {
 
 
     const logout = (() => {
-        console.log('gfdghsfgdfjgjhkj');
+        // console.log('gfdghsfgdfjgjhkj');
         confirmAlert({
             title: 'Confirm to submit',
             message: 'Are you sure to Logout.',
@@ -129,7 +130,7 @@ function HeaderCompany() {
         // console.log('tyui');
         try {
             const {data} = notificationStatus(companyId)
-            console.log(data,'qwertyu');
+            // console.log(data,'qwertyu');
         } catch (error) {
             console.log(error.message);
         }
@@ -212,7 +213,8 @@ function HeaderCompany() {
                 notifiModal ?
 
                     <div class="absolute right-20 max-h-48 z-20 w-60 py-2  overflow-y-scroll no-scrollbar scrollbar-hide  rounded-md shadow-xl dark:bg-slate-100 top-16 bg-sky-100  ">
-                        {details?.notification?.map((obj) => {
+                        {details?.notification?.length == 0 ? (<h1 className='ml-5'>No notifications</h1>):
+                        details?.notification?.map((obj) => {
 
                     return (
 
@@ -223,7 +225,7 @@ function HeaderCompany() {
 
                             <div class="mx-1 flex ">
                                 <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-900 ">{obj?.senderId?.username}</h1>
-                                <p class="text-sm font-semibold text-gray-700 dark:text-gray-900 pl-2">{obj.description}</p>
+                                <p class="text-sm font-normal text-gray-700 dark:text-gray-900 pl-2">{obj.description}</p>
 
                             </div>
                         </div>

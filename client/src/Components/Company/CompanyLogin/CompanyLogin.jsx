@@ -28,10 +28,10 @@ function CompanyLogin() {
     }
 
     const handleChange=(e)=>{
-        console.log(e.target);
+        // console.log(e.target);
         const {name,value}=e.target
         setFormValues({...formValues,[name]:value})
-        console.log(formValues);
+        // console.log(formValues);
 
     }
 
